@@ -2,7 +2,7 @@ import React from "react";
 
 const NewPost = () => {
   return (
-    <div class="new-post">
+    <div className="new-post">
       <form>
         upload image(s)
         <br />
