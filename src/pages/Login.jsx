@@ -1,15 +1,9 @@
-import { ErrorMessage, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 
 const createAccountSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Required"),
-  username: Yup.string()
-    .min(3, "Username should be at least 3 characters long")
-    .max(50, "Username should be at most 50 characters")
-    .required("Required"),
-  password: Yup.string()
-    .min(8, "Password should be at least 8 characters long")
-    .required("Required"),
+  username: Yup.string().required("Required"),
+  password: Yup.string().required("Required"),
 });
 
 const Login = () => {
@@ -30,21 +24,25 @@ const Login = () => {
         }}
       >
         {({ isSubmitting }) => (
-          <Form>
-            <Field type="email" name="email" />
-            <ErrorMessage name="email" component="div" />
-
+          <Form className="form-auth">
+            <label htmlFor="username">Username:</label>
             <Field type="text" name="username" />
-            <ErrorMessage name="username" component="div" />
+            <ErrorMessage
+              name="username"
+              component="div"
+              className="form-error-message"
+            />
 
+            <label htmlFor="username">Username:</label>
             <Field type="password" name="password" />
-            <ErrorMessage name="password" component="div" />
-
-            <Field type="confirmPassword" name="confirmPassword" />
-            <ErrorMessage name="confirmPassword" component="div" />
+            <ErrorMessage
+              name="password"
+              component="div"
+              className="form-error-message"
+            />
 
             <button type="submit" disabled={isSubmitting}>
-              Create account
+              Login
             </button>
           </Form>
         )}
