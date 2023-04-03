@@ -93,7 +93,8 @@ button {
     }
   }
 
-  input {
+  input:not([type="file"]),
+  textarea {
     display: block;
     width: 100%;
     border: 1px solid #e5e5e5;

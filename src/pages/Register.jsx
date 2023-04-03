@@ -1,112 +1,77 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../firebase/firebase";
-import * as Yup from "yup";
-import { useState } from "react";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "../hooks/auth";
 
-const createAccountSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Required"),
-  username: Yup.string()
+const registerSchema = yup.object().shape({
+  email: yup.string().email("Invalid email").required("Required"),
+  username: yup
+    .string()
     .min(3, "Username must be at least 3 characters long")
     .max(50, "Username must be at most 50 characters")
     .required("Required"),
-  password: Yup.string()
+  password: yup
+    .string()
     .min(6, "Password must be at least 6 characters long")
     .required("Required"),
-  confirmPassword: Yup.string().oneOf(
-    [Yup.ref("password"), null],
-    "Passwords must match"
-  ),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Passwords must match"),
 });
 
 const Register = () => {
-  const [errorMessage, setErrorMessage] = useState("");
+  const { createAccount } = useAuth();
 
-  const handleCreateUser = async (values) => {
-    try {
-      setErrorMessage("");
-      const user = await createUserWithEmailAndPassword(
-        auth,
-        values.email,
-        values.password
-      );
-      updateProfile(user.user, {
-        displayName: values.username,
-      });
-      console.log(user);
-    } catch (error) {
-      if (error.code == "auth/email-already-in-use") {
-        setErrorMessage("The email address is already in use");
-      } else if (error.code == "auth/invalid-email") {
-        setErrorMessage("The email address is not valid.");
-      } else if (error.code == "auth/operation-not-allowed") {
-        setErrorMessage("Operation not allowed.");
-      } else if (error.code == "auth/weak-password") {
-        setErrorMessage("The password is too weak.");
-      }
-    }
+  const handleRegister = async (values) => {
+    const { email, username, password } = values;
+    await createAccount(email, username, password);
   };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(registerSchema),
+  });
 
   return (
     <div>
       <h1>Register</h1>
 
-      <Formik
-        initialValues={{
-          email: "",
-          username: "",
-          password: "",
-          confirmPassword: "",
-        }}
-        validationSchema={createAccountSchema}
-        onSubmit={async (values) => {
-          await handleCreateUser(values);
-        }}
-      >
-        {({ isSubmitting }) => (
-          <Form className="form-auth">
-            <label htmlFor="username">Email:</label>
-            <Field type="email" name="email" />
-            <ErrorMessage
-              name="email"
-              component="div"
-              className="form-error-message"
-            />
-
-            <label htmlFor="username">Username:</label>
-            <Field type="text" name="username" />
-            <ErrorMessage
-              name="username"
-              component="div"
-              className="form-error-message"
-            />
-
-            <label htmlFor="username">Password:</label>
-            <Field type="password" name="password" />
-            <ErrorMessage
-              name="password"
-              component="div"
-              className="form-error-message"
-            />
-
-            <label htmlFor="username">Confirm password:</label>
-            <Field type="password" name="confirmPassword" />
-            <ErrorMessage
-              name="confirmPassword"
-              component="div"
-              className="form-error-message"
-            />
-
-            <button type="submit" disabled={isSubmitting}>
-              Create account
-            </button>
-
-            {errorMessage && (
-              <div className="form-error-message">{errorMessage}</div>
-            )}
-          </Form>
+      <form onSubmit={handleSubmit(handleRegister)} className="form-auth">
+        <label htmlFor="username">Username:</label>
+        <input type="text" {...register("username")} />
+        {errors.username && (
+          <div className="form-error-message">{errors.username.message}</div>
         )}
-      </Formik>
+
+        <label htmlFor="email">Email:</label>
+        <input type="email" {...register("email")} />
+        {errors.email && (
+          <div className="form-error-message">{errors.email.message}</div>
+        )}
+
+        <label htmlFor="password">Password:</label>
+        <input type="password" {...register("password")} />
+        {errors.password && (
+          <div className="form-error-message">{errors.password.message}</div>
+        )}
+
+        <label htmlFor="confirmPassword">Confirm password:</label>
+        <input type="password" {...register("confirmPassword")} />
+        {errors.confirmPassword && (
+          <div className="form-error-message">
+            {errors.confirmPassword.message}
+          </div>
+        )}
+
+        <button type="submit">Create account</button>
+      </form>
+
+      <ToastContainer />
     </div>
   );
 };

@@ -1,8 +1,9 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../hooks/auth";
 
 const Nav = () => {
-  const user = false;
+  const { user, logout } = useAuth();
 
   return (
     <div>
@@ -16,7 +17,7 @@ const Nav = () => {
               <NavLink to="/profile">Profile</NavLink>
             </li>
             <li>
-              <NavLink to="/logout">Logout</NavLink>
+              <NavLink onClick={(e) => logout(e)}>Logout</NavLink>
             </li>
           </>
         ) : (
