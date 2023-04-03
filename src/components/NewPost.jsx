@@ -33,6 +33,7 @@ const NewPost = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: yupResolver(newPostSchema),
   });
@@ -42,12 +43,10 @@ const NewPost = () => {
   const handleNewPost = async (data) => {
     const { photo, description } = data;
 
+    // Move this to a custom post hook
     try {
       // Upload photo to storage
-      const storageRef = ref(
-        storage,
-        "photos/" + `${photo[0].name}_${Date.now()}`
-      );
+      const storageRef = ref(storage, `photos/${Date.now()}_${photo[0].name}`);
       await uploadBytes(storageRef, photo);
 
       // Get download URL for photo
@@ -55,11 +54,12 @@ const NewPost = () => {
 
       // Add post to db
       await addDoc(collection(db, "posts"), {
-        uid: user.id, // undefined here
+        uid: user.uid, // undefined here
         photo: photoUrl,
         description,
       });
       toast.success("Post added");
+      reset();
     } catch (error) {
       console.log(error.message);
       toast.error(error.message);
