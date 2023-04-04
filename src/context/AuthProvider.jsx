@@ -58,6 +58,12 @@ export const AuthProvider = ({ children }) => {
     return unsubscribe;
   }, [auth]);
 
+  useEffect(() => {
+    navigate("/");
+  }, [state.user]);
+
+  console.log(state.auth);
+
   // Register
   const createAccount = async (email, username, password) => {
     try {
@@ -79,7 +85,6 @@ export const AuthProvider = ({ children }) => {
 
       dispatch({ type: "SET_USER", payload: user });
       toast.success("Account created successfully");
-      navigate("/");
     } catch (error) {
       dispatch({ type: "SET_ERROR", payload: error.message });
       toast.error(error.message);
@@ -106,10 +111,10 @@ export const AuthProvider = ({ children }) => {
       const email = userSnapshot.docs[0].data().email;
 
       // Try to login
-      const user = await signInWithEmailAndPassword(auth, email, password);
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
+      console.log(user);
       dispatch({ type: "SET_USER", payload: user });
       toast.success("Logged in successfully");
-      navigate("/");
     } catch (error) {
       toast.error(error.message);
     }
@@ -122,6 +127,7 @@ export const AuthProvider = ({ children }) => {
       await signOut(auth);
       dispatch({ type: "SET_USER", payload: null });
       toast.success("Logged out successfully");
+      navigate("/login");
     } catch (error) {
       toast.error(error.message);
     }

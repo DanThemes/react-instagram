@@ -64,10 +64,6 @@ const NewPost = () => {
 
         <button type="submit">Add Post</button>
       </form>
-
-      {/* <ToastContainer /> */}
-
-      <Posts />
     </div>
   );
 };

@@ -11,13 +11,7 @@ const loginSchema = yup.object().shape({
 });
 
 const Login = () => {
-  const { user, login } = useAuthContext();
-  const navigate = useNavigate();
-
-  // Too slow
-  if (user) {
-    navigate("/");
-  }
+  const { login } = useAuthContext();
 
   const {
     register,
