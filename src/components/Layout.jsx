@@ -1,6 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
+import Sidebar from "./Sidebar";
 
 const Layout = () => {
   return (
@@ -8,7 +9,10 @@ const Layout = () => {
       <Header />
       <main id="site-content">
         <div className="container">
-          <Outlet />
+          <div className="layout-cols">
+            <Outlet />
+            <Sidebar />
+          </div>
         </div>
       </main>
     </div>

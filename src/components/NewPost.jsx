@@ -7,6 +7,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
+import Posts from "./Posts";
+import { useNewPost } from "../hooks/posts";
 
 const newPostSchema = yup.object().shape({
   photo: yup
@@ -41,29 +43,8 @@ const NewPost = () => {
   const { user } = useAuth();
 
   const handleNewPost = async (data) => {
-    const { photo, description } = data;
-
-    // Move this to a custom post hook
-    try {
-      // Upload photo to storage
-      const storageRef = ref(storage, `photos/${Date.now()}_${photo[0].name}`);
-      await uploadBytes(storageRef, photo);
-
-      // Get download URL for photo
-      const photoUrl = await getDownloadURL(storageRef);
-
-      // Add post to db
-      await addDoc(collection(db, "posts"), {
-        uid: user.uid, // undefined here
-        photo: photoUrl,
-        description,
-      });
-      toast.success("Post added");
-      reset();
-    } catch (error) {
-      console.log(error.message);
-      toast.error(error.message);
-    }
+    await useNewPost(data, user);
+    reset();
   };
 
   return (
@@ -85,6 +66,8 @@ const NewPost = () => {
       </form>
 
       <ToastContainer />
+
+      <Posts />
     </div>
   );
 };
