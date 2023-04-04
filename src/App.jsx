@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ProtectedPage from "./components/ProtectedPage";
 
 const router = createBrowserRouter([
   {
@@ -13,7 +13,11 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
+        element: (
+          <ProtectedPage>
+            <Home />
+          </ProtectedPage>
+        ),
       },
       {
         path: "/register",
@@ -25,20 +29,20 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <Profile />,
+        element: (
+          <ProtectedPage>
+            <Profile />
+          </ProtectedPage>
+        ),
       },
     ],
   },
 ]);
 
-const queryClient = new QueryClient();
-
 function App() {
   return (
     <div className="app">
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
+      <RouterProvider router={router} />
     </div>
   );
 }

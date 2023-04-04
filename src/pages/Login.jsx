@@ -1,9 +1,9 @@
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../hooks/auth";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../context/AuthProvider";
 
 const loginSchema = yup.object().shape({
   username: yup.string().required("Required"),
@@ -11,7 +11,7 @@ const loginSchema = yup.object().shape({
 });
 
 const Login = () => {
-  const { user } = useAuth();
+  const { user, login } = useAuthContext();
   const navigate = useNavigate();
 
   // Too slow
@@ -26,8 +26,6 @@ const Login = () => {
   } = useForm({
     resolver: yupResolver(loginSchema),
   });
-
-  const { login } = useAuth();
 
   const handleLogin = async (data) => {
     const { username, password } = data;

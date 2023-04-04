@@ -65,7 +65,7 @@ const NewPost = () => {
         <button type="submit">Add Post</button>
       </form>
 
-      <ToastContainer />
+      {/* <ToastContainer /> */}
 
       <Posts />
     </div>
