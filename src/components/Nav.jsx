@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../hooks/auth";
 
 const Nav = () => {
@@ -17,7 +17,7 @@ const Nav = () => {
               <NavLink to="/profile">Profile</NavLink>
             </li>
             <li>
-              <NavLink onClick={(e) => logout(e)}>Logout</NavLink>
+              <Link onClick={(e) => logout(e)}>Logout</Link>
             </li>
           </>
         ) : (
