@@ -13,7 +13,14 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/users";
@@ -56,36 +63,23 @@ export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { user } = useUser(auth, state.user?.uid);
 
   const navigate = useNavigate();
 
-  // Set user
+  // Set user on auth state change
   useEffect(() => {
-    console.log(user);
-    if (user) {
-      dispatch({ type: "SET_USER", payload: user });
-    }
-  }, [user]);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      const q = query(collection(db, "users"), where("uid", "==", user.uid));
+      const usersRef = await getDocs(q);
+      const userRef = usersRef.docs[0].data();
+      if (userRef) {
+        const userData = usersRef.docs[0].data();
+        dispatch({ type: "SET_USER", payload: userData });
+      }
+    });
 
-  // useEffect(() => {
-  //   dispatch({ type: "SET_USER", payload: userData });
-  // }, [userData]);
-
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //     dispatch({ type: "SET_USER", payload: user });
-  //   });
-
-  //   return unsubscribe;
-  // }, [auth, userData]);
-
-  // Navigate to Home after login/register/logout
-  useEffect(() => {
-    if (state.user) {
-      navigate("/");
-    }
-  }, [state.user, navigate]);
+    return unsubscribe;
+  }, [auth]);
 
   // Register
   const createAccount = async (email, username, password) => {
@@ -103,11 +97,13 @@ export const AuthProvider = ({ children }) => {
         uid: user.uid,
         email,
         username,
+        displayName: "",
+        bio: "",
+        avatar: "",
       };
       await addDoc(usersRef, userData);
-
-      // dispatch({ type: "SET_USER", payload: user });
       toast.success("Account created successfully");
+      navigate("/");
     } catch (error) {
       dispatch({ type: "SET_ERROR", payload: error.message });
       toast.error(error.message);
@@ -134,9 +130,9 @@ export const AuthProvider = ({ children }) => {
       const email = userSnapshot.docs[0].data().email;
 
       // Try to login
-      const { user } = await signInWithEmailAndPassword(auth, email, password);
-      // dispatch({ type: "SET_USER", payload: user });
+      await signInWithEmailAndPassword(auth, email, password);
       toast.success("Logged in successfully");
+      navigate("/");
     } catch (error) {
       toast.error(error.message);
     }
@@ -147,11 +143,30 @@ export const AuthProvider = ({ children }) => {
     e.preventDefault();
     try {
       await signOut(auth);
-      // dispatch({ type: "SET_USER", payload: null });
       toast.success("Logged out successfully");
       navigate("/login");
     } catch (error) {
       toast.error(error.message);
+    }
+  };
+
+  // Update profile
+  const updateProfile = async (data) => {
+    try {
+      const q = query(
+        collection(db, "users"),
+        where("uid", "==", state.user.uid)
+      );
+      const usersRef = await getDocs(q);
+      const userRef = usersRef.docs[0].ref;
+
+      const newProfileData = { ...state.user, ...data };
+
+      await updateDoc(userRef, newProfileData);
+      dispatch({ type: "SET_USER", payload: newProfileData });
+      toast.success("Profile updated");
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -164,6 +179,7 @@ export const AuthProvider = ({ children }) => {
     createAccount,
     login,
     logout,
+    updateProfile,
   };
 
   return (

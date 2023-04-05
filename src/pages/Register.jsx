@@ -1,7 +1,6 @@
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuthContext } from "../context/AuthProvider";
 
@@ -70,8 +69,6 @@ const Register = () => {
 
         <button type="submit">Create account</button>
       </form>
-
-      <ToastContainer />
     </div>
   );
 };

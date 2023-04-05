@@ -26,6 +26,8 @@ p {
 }
 
 a {
+  color: #000;
+  text-decoration: none;
   transition: all 0.3s ease;
 }
 
@@ -58,13 +60,33 @@ button {
 }
 
 #site-header {
-  background: #000;
-  color: #fff;
+  position: relative;
+
+  .site-header-bg {
+    &::before {
+      // background-color: #61896d;
+      background: url(assets/header-wave.svg) no-repeat;
+      background-size: 100%;
+      position: absolute;
+      content: "";
+      display: block;
+      width: 100vw;
+      height: 134px;
+      z-index: 1;
+    }
+
+    // background-color: #61896d;
+    position: relative;
+    color: #fff;
+    padding-bottom: 4rem;
+  }
 
   .container {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    z-index: 2;
+    position: relative;
 
     .nav-wrapper {
       ul {
@@ -79,7 +101,7 @@ button {
             text-decoration: none;
 
             &.active {
-              color: #ce5b5b;
+              color: #f1c40f;
             }
           }
         }

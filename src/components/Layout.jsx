@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify";
 const Layout = () => {
   return (
     <AuthProvider>
-      <div>
+      <>
         <Header />
         <main id="site-content">
           <div className="container">
@@ -18,7 +18,7 @@ const Layout = () => {
             </div>
           </div>
         </main>
-      </div>
+      </>
       <ToastContainer autoClose={1000} hideProgressBar={true} />
     </AuthProvider>
   );

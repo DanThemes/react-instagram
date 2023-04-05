@@ -1,8 +1,6 @@
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { ToastContainer } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../context/AuthProvider";
 
 const loginSchema = yup.object().shape({
@@ -46,8 +44,6 @@ const Login = () => {
 
         <button type="submit">Login</button>
       </form>
-
-      <ToastContainer />
     </div>
   );
 };

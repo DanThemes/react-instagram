@@ -5,14 +5,16 @@ import Nav from "./Nav";
 const Header = () => {
   return (
     <header id="site-header">
-      <div className="container">
-        <div className="logo-wrapper">
-          <Link to="/">
-            <h1>logo</h1>
-          </Link>
-        </div>
-        <div className="nav-wrapper">
-          <Nav />
+      <div className="site-header-bg">
+        <div className="container">
+          <div className="logo-wrapper">
+            <Link to="/">
+              <h1>logo</h1>
+            </Link>
+          </div>
+          <div className="nav-wrapper">
+            <Nav />
+          </div>
         </div>
       </div>
     </header>

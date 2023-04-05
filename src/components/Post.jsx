@@ -17,7 +17,7 @@ const Post = ({ post }) => {
   }
 
   if (error) {
-    return { error };
+    return error.message;
   }
 
   return (
