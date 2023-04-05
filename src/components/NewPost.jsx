@@ -1,14 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
-import { db, storage } from "../firebase/firebase";
-import { useAuth } from "../hooks/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { addDoc, collection } from "firebase/firestore";
-import Posts from "./Posts";
 import { useNewPost } from "../hooks/posts";
+import { useAuthContext } from "../context/AuthProvider";
 
 const newPostSchema = yup.object().shape({
   photo: yup
@@ -40,7 +35,9 @@ const NewPost = () => {
     resolver: yupResolver(newPostSchema),
   });
 
-  const { user } = useAuth();
+  const {
+    auth: { user },
+  } = useAuthContext();
 
   const handleNewPost = async (data) => {
     await useNewPost(data, user);

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAuth } from "../hooks/auth";
+import { useAuthContext } from "../context/AuthProvider";
 
 const registerSchema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Required"),
@@ -22,7 +22,7 @@ const registerSchema = yup.object().shape({
 });
 
 const Register = () => {
-  const { createAccount } = useAuth();
+  const { createAccount } = useAuthContext();
 
   const handleRegister = async (values) => {
     const { email, username, password } = values;

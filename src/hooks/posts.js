@@ -63,6 +63,9 @@ export const useNewPost = async (data, user) => {
 };
 
 export const useDeletePost = async (post) => {
+  const confirmDelete = confirm("Are you sure you want to delete this post?");
+  if (!confirmDelete) return;
+
   try {
     const postRef = doc(db, "posts", post.id);
     await deleteDoc(postRef);

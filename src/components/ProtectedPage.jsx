@@ -10,7 +10,7 @@ const ProtectedPage = ({ children }) => {
   if (isLoading) {
     return "Loading";
   }
-  console.log(auth);
+  // console.log(auth);
 
   if (error) {
     return error;

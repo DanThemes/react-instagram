@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from "react";
 import { auth, db } from "../firebase/firebase";
 import {
   createUserWithEmailAndPassword,
@@ -9,6 +16,7 @@ import {
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../hooks/users";
 
 const initialState = {
   user: null,
@@ -48,21 +56,36 @@ export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { user } = useUser(auth, state.user?.uid);
+
   const navigate = useNavigate();
 
+  // Set user
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    console.log(user);
+    if (user) {
       dispatch({ type: "SET_USER", payload: user });
-    });
+    }
+  }, [user]);
 
-    return unsubscribe;
-  }, [auth]);
+  // useEffect(() => {
+  //   dispatch({ type: "SET_USER", payload: userData });
+  // }, [userData]);
 
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     dispatch({ type: "SET_USER", payload: user });
+  //   });
+
+  //   return unsubscribe;
+  // }, [auth, userData]);
+
+  // Navigate to Home after login/register/logout
   useEffect(() => {
-    navigate("/");
-  }, [state.user]);
-
-  console.log(state.auth);
+    if (state.user) {
+      navigate("/");
+    }
+  }, [state.user, navigate]);
 
   // Register
   const createAccount = async (email, username, password) => {
@@ -83,7 +106,7 @@ export const AuthProvider = ({ children }) => {
       };
       await addDoc(usersRef, userData);
 
-      dispatch({ type: "SET_USER", payload: user });
+      // dispatch({ type: "SET_USER", payload: user });
       toast.success("Account created successfully");
     } catch (error) {
       dispatch({ type: "SET_ERROR", payload: error.message });
@@ -112,8 +135,7 @@ export const AuthProvider = ({ children }) => {
 
       // Try to login
       const { user } = await signInWithEmailAndPassword(auth, email, password);
-      console.log(user);
-      dispatch({ type: "SET_USER", payload: user });
+      // dispatch({ type: "SET_USER", payload: user });
       toast.success("Logged in successfully");
     } catch (error) {
       toast.error(error.message);
@@ -125,7 +147,7 @@ export const AuthProvider = ({ children }) => {
     e.preventDefault();
     try {
       await signOut(auth);
-      dispatch({ type: "SET_USER", payload: null });
+      // dispatch({ type: "SET_USER", payload: null });
       toast.success("Logged out successfully");
       navigate("/login");
     } catch (error) {

@@ -19,7 +19,7 @@ const Layout = () => {
           </div>
         </main>
       </div>
-      <ToastContainer />
+      <ToastContainer autoClose={1000} hideProgressBar={true} />
     </AuthProvider>
   );
 };
