@@ -14,7 +14,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { db } from "../firebase/firebase";
 
 const profileSchema = yup.object().shape({
-  bio: yup.string().required("Required"),
+  displayName: yup.string(),
+  bio: yup.string(),
 });
 
 const Profile = () => {
@@ -44,6 +45,16 @@ const Profile = () => {
       <hr />
       {console.log(user)}
       <form onSubmit={handleSubmit(handleUpdateProfile)} className="form-auth">
+        <label htmlFor="displayName">Display name:</label>
+        <input
+          type="text"
+          {...register("displayName")}
+          placeholder={user.displayName}
+        />
+        {errors.displayName && (
+          <div className="form-error-message">{errors.displayName.message}</div>
+        )}
+
         <label htmlFor="bio">Bio:</label>
         <input type="text" {...register("bio")} placeholder={user.bio} />
         {errors.bio && (

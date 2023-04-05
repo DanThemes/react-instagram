@@ -160,6 +160,12 @@ export const AuthProvider = ({ children }) => {
       const usersRef = await getDocs(q);
       const userRef = usersRef.docs[0].ref;
 
+      // Remove empty fields
+      Object.keys(data).forEach((key) => {
+        if (data[key] === "" || data[key] == null) {
+          delete data[key];
+        }
+      });
       const newProfileData = { ...state.user, ...data };
 
       await updateDoc(userRef, newProfileData);
