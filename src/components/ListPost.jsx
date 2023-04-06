@@ -42,7 +42,7 @@ const Post = ({ post }) => {
           <strong>{user.username}</strong> {post.description}
         </p>
         <p className="post-date">
-          {formatDistance(post.createdAt, Date.now())}
+          {formatDistance(post.createdAt, Date.now())} ago
         </p>
       </div>
     </div>

@@ -10,11 +10,6 @@ const GridPost = ({ post }) => {
   const { auth } = useAuthContext();
   const isAuthor = post.uid === auth?.user?.uid;
 
-  // console.log(post);
-  const handleDelete = async () => {
-    await useDeletePost(auth?.user?.uid, post);
-  };
-
   if (isLoading) {
     return "Loading";
   }
