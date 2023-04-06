@@ -3,13 +3,16 @@ import { useDeletePost } from "../hooks/posts";
 import { useUser } from "../hooks/users";
 import { formatDistance } from "date-fns";
 import Avatar from "./Avatar";
+import { useAuthContext } from "../context/AuthProvider";
 
 const Post = ({ post }) => {
   const { user, isLoading, error } = useUser(post.uid);
+  const { auth } = useAuthContext();
+  const isAuthor = post.uid === auth?.user?.uid;
 
   // console.log(post);
   const handleDelete = async () => {
-    await useDeletePost(post);
+    await useDeletePost(auth?.user?.uid, post);
   };
 
   if (isLoading) {
@@ -24,11 +27,10 @@ const Post = ({ post }) => {
     <div className="post">
       <div className="post-header">
         <div className="post-header-left">
-          <Avatar />
-          {user.username}
+          <Avatar uid={post.uid} size="small" />
         </div>
         <div className="post-header-right" onClick={handleDelete}>
-          <span className="delete-button">Delete</span>
+          {isAuthor && <span className="delete-button">Delete</span>}
         </div>
       </div>
       <div className="post-image">

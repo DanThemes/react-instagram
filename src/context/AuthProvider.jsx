@@ -6,7 +6,7 @@ import {
   useReducer,
   useState,
 } from "react";
-import { auth, db } from "../firebase/firebase";
+import { auth, db, storage } from "../firebase/firebase";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -24,7 +24,7 @@ import {
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/users";
-import { uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const initialState = {
   user: null,
@@ -176,12 +176,16 @@ export const AuthProvider = ({ children }) => {
 
       // Upload avatar
       if (data.avatar) {
-        console.log(data);
-        const avatarName = `${state.user.uid}${data.avatar.split["."].pop()}`;
+        const avatarFileExtension = data.avatar[0].name.substring(
+          data.avatar[0].name.lastIndexOf(".")
+        );
+        const avatarName = `${state.user.username}${avatarFileExtension}`;
+        console.log(avatarName);
+        // const avatarName = `${state.user.uid}.jpg`;
         const storageRef = ref(storage, `avatars/${avatarName}`);
 
         // Upload photo to storage
-        await uploadBytes(storageRef, data.avatar);
+        await uploadBytes(storageRef, data.avatar[0]);
 
         // Get download URL for photo
         const avatarUrl = await getDownloadURL(storageRef);

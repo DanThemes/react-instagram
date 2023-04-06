@@ -1,17 +1,21 @@
 import React from "react";
-import { useAuthContext } from "../context/AuthProvider";
+import { useUser } from "../hooks/users";
 
-const Avatar = () => {
-  const {
-    auth: { user },
-  } = useAuthContext();
+const Avatar = ({ uid, size = "medium" }) => {
+  const { user, isLoading, error } = useUser(uid);
 
-  {
-    console.log(user);
+  if (isLoading) {
+    return "Loading";
   }
+
+  if (error) {
+    return "Loading";
+  }
+
   return (
-    <div>
-      <img src={user.photoURL} alt={user.username} />
+    <div className={`avatar avatar-${size}`}>
+      {user.avatar && <img src={user.avatar} alt={user.username} />}
+      <span>{user.username}</span>
     </div>
   );
 };

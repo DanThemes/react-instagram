@@ -55,10 +55,11 @@ const Profile = () => {
 
   const handleUpdateProfile = async (data) => {
     // Append the file to the "avatar" property of "data"
-    const file = new FormData();
-    file.append("avatar", data.avatar[0]);
-    data.avatar = file;
+    // const file = new FormData();
+    // file.append("avatar2", data.avatar[0]);
+    // data.avatar2 = file;
 
+    console.log(data);
     await updateProfile(data);
     reset();
   };

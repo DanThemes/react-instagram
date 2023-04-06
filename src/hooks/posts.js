@@ -3,11 +3,9 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDocs,
   onSnapshot,
   orderBy,
   query,
-  where,
 } from "firebase/firestore";
 import { db, storage } from "../firebase/firebase";
 import { useEffect, useState } from "react";
@@ -18,6 +16,7 @@ import {
   ref,
   uploadBytes,
 } from "firebase/storage";
+import { useAuthContext } from "../context/AuthProvider";
 
 export const usePosts = () => {
   const [posts, setPosts] = useState(null);
@@ -62,7 +61,11 @@ export const useNewPost = async (data, user) => {
   }
 };
 
-export const useDeletePost = async (post) => {
+export const useDeletePost = async (uid, post) => {
+  if (post.uid !== uid) {
+    toast.error("You're not allowed to delete this post");
+    return;
+  }
   const confirmDelete = confirm("Are you sure you want to delete this post?");
   if (!confirmDelete) return;
 
