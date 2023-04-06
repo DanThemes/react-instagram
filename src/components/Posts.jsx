@@ -1,6 +1,7 @@
 import React from "react";
 import { usePosts } from "../hooks/posts";
-import Post from "./Post";
+import ListPost from "./ListPost";
+import GridPost from "./GridPost";
 
 const Posts = ({ uid = null }) => {
   const posts = usePosts(uid);
@@ -9,12 +10,22 @@ const Posts = ({ uid = null }) => {
     return "Loading";
   }
 
-  console.log(uid);
+  // Grid Posts
+  if (uid) {
+    return (
+      <div className="grid-posts">
+        {posts.map((post) => (
+          <GridPost key={post.id} post={post} />
+        ))}
+      </div>
+    );
+  }
 
+  // List Posts
   return (
-    <div className="posts">
+    <div className="list-posts">
       {posts.map((post) => (
-        <Post key={post.id} post={post} />
+        <ListPost key={post.id} post={post} />
       ))}
     </div>
   );

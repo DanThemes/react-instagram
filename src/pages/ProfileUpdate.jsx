@@ -53,7 +53,7 @@ const ProfileUpdate = () => {
 
   return (
     <div>
-      <h1>Profile</h1>
+      <h1>Update Profile</h1>
       Bio: {user.bio}
       <hr />
       {console.log(user)}
