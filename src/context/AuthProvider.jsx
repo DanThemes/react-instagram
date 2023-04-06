@@ -24,6 +24,7 @@ import {
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/users";
+import { uploadBytes } from "firebase/storage";
 
 const initialState = {
   user: null,
@@ -69,12 +70,20 @@ export const AuthProvider = ({ children }) => {
   // Set user on auth state change
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        dispatch({ type: "SET_USER", payload: null });
+        dispatch({ type: "SET_LOADING", payload: false });
+        return;
+      }
+
       const q = query(collection(db, "users"), where("uid", "==", user.uid));
       const usersRef = await getDocs(q);
       const userRef = usersRef.docs[0].data();
+
       if (userRef) {
         const userData = usersRef.docs[0].data();
         dispatch({ type: "SET_USER", payload: userData });
+        dispatch({ type: "SET_LOADING", payload: false });
       }
     });
 
@@ -160,12 +169,32 @@ export const AuthProvider = ({ children }) => {
       const usersRef = await getDocs(q);
       const userRef = usersRef.docs[0].ref;
 
+      if (!userRef) {
+        toast.success("User doesn't exist");
+        return;
+      }
+
+      // Upload avatar
+      if (data.avatar) {
+        console.log(data);
+        const avatarName = `${state.user.uid}${data.avatar.split["."].pop()}`;
+        const storageRef = ref(storage, `avatars/${avatarName}`);
+
+        // Upload photo to storage
+        await uploadBytes(storageRef, data.avatar);
+
+        // Get download URL for photo
+        const avatarUrl = await getDownloadURL(storageRef);
+        data.avatar = avatarUrl;
+      }
+
       // Remove empty fields
       Object.keys(data).forEach((key) => {
         if (data[key] === "" || data[key] == null) {
           delete data[key];
         }
       });
+
       const newProfileData = { ...state.user, ...data };
 
       await updateDoc(userRef, newProfileData);

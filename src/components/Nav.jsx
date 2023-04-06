@@ -8,13 +8,13 @@ const Nav = () => {
     logout,
   } = useAuthContext();
 
-  // if (isLoading) {
-  //   return "Loading";
-  // }
+  if (isLoading) {
+    return "Loading";
+  }
 
-  // if (error) {
-  //   return error;
-  // }
+  if (error) {
+    return error;
+  }
 
   return (
     !isLoading && (

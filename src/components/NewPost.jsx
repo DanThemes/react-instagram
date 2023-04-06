@@ -8,6 +8,8 @@ import { useAuthContext } from "../context/AuthProvider";
 const newPostSchema = yup.object().shape({
   photo: yup
     .mixed()
+    .nullable()
+    .notRequired()
     .test("required", "Required", (file) => {
       if (file.length > 0) {
         return true;
@@ -16,7 +18,7 @@ const newPostSchema = yup.object().shape({
     })
     .test(
       "fileSize",
-      "Only documents up to 2MB are permitted.",
+      "Image must be 2MB or smaller.",
       (files) =>
         !files || // Check if `files` is defined
         files.length === 0 || // Check if `files` is not an empty list

@@ -8,12 +8,32 @@ import {
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useAuthContext } from "../context/AuthProvider";
-import { toast } from "react-toastify";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { db } from "../firebase/firebase";
+
+const SUPPORTED_FORMATS = ["image/jpeg", "image/jpg", "image/png"];
 
 const profileSchema = yup.object().shape({
+  avatar: yup
+    .mixed()
+    .test(
+      "fileFormat",
+      "Image type should be JPG or PNG",
+      (files) =>
+        !files.length ||
+        Array.from(files).every(
+          (file) => files.length && SUPPORTED_FORMATS.includes(file.type)
+        )
+    )
+    .test(
+      "fileSize",
+      "File is too large",
+      (files) =>
+        !files.length ||
+        Array.from(files).every(
+          (file) => files.length && file.size <= 2_000_000
+        )
+    ),
   displayName: yup.string(),
   bio: yup.string(),
 });
@@ -34,6 +54,11 @@ const Profile = () => {
   });
 
   const handleUpdateProfile = async (data) => {
+    // Append the file to the "avatar" property of "data"
+    const file = new FormData();
+    file.append("avatar", data.avatar[0]);
+    data.avatar = file;
+
     await updateProfile(data);
     reset();
   };
@@ -45,6 +70,12 @@ const Profile = () => {
       <hr />
       {console.log(user)}
       <form onSubmit={handleSubmit(handleUpdateProfile)} className="form-auth">
+        <label htmlFor="avatar">Avatar:</label>
+        <input type="file" {...register("avatar")} />
+        {errors.avatar && (
+          <div className="form-error-message">{errors.avatar.message}</div>
+        )}
+
         <label htmlFor="displayName">Display name:</label>
         <input
           type="text"
