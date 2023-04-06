@@ -46,9 +46,15 @@ const Post = ({ post }) => {
             {formatDistance(post.createdAt, Date.now())} ago
           </p>
         </div>
-        <div className="post-new-comment">
-          <input type="text" placeholder="Add a comment..." />
-        </div>
+
+        {/* Add new comment */}
+        {auth.user && (
+          <div className="post-new-comment">
+            <input type="text" placeholder="Add a comment..." />
+          </div>
+        )}
+
+        {/* All comments */}
         <div className="post-comments">
           <div className="post-comment">comment</div>
           <div className="post-comment">comment</div>
