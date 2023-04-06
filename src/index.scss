@@ -161,6 +161,20 @@ button {
 
     .post-footer {
       padding: 1rem;
+
+      .post-content {
+        border-top: 1px solid #eee;
+        margin-top: 1rem;
+        padding-top: 1rem;
+      }
+
+      .post-new-comment {
+      }
+
+      .post-comments {
+        .post-comment {
+        }
+      }
     }
 
     .post-image {

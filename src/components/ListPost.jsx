@@ -38,12 +38,22 @@ const Post = ({ post }) => {
       </div>
 
       <div className="post-footer">
-        <p className="post-description">
-          <strong>{user.username}</strong> {post.description}
-        </p>
-        <p className="post-date">
-          {formatDistance(post.createdAt, Date.now())} ago
-        </p>
+        <div className="post-content">
+          <p className="post-description">
+            <strong>{user.username}</strong> {post.description}
+          </p>
+          <p className="post-date">
+            {formatDistance(post.createdAt, Date.now())} ago
+          </p>
+        </div>
+        <div className="post-new-comment">
+          <input type="text" placeholder="Add a comment..." />
+        </div>
+        <div className="post-comments">
+          <div className="post-comment">comment</div>
+          <div className="post-comment">comment</div>
+          <div className="post-comment">comment</div>
+        </div>
       </div>
     </div>
   );
