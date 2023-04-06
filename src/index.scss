@@ -67,22 +67,16 @@ button {
   position: relative;
 
   .site-header-bg {
-    &::before {
-      // background-color: #61896d;
-      background: url(assets/header-wave.svg) no-repeat;
-      background-size: 100%;
-      position: absolute;
-      content: "";
-      display: block;
-      width: 100vw;
-      height: 134px;
-      z-index: 1;
-    }
+    background: url(assets/header-wave.svg) no-repeat;
+    background-size: 100%;
+    display: block;
+    width: 100vw;
+    height: 134px;
+    z-index: 1;
+  }
 
-    // background-color: #61896d;
-    position: relative;
-    color: #fff;
-    padding-bottom: 4rem;
+  #site-header-content {
+    background: #61896d;
   }
 
   .container {

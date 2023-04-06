@@ -14,7 +14,6 @@ const ProtectedPage = ({ children }) => {
     return error;
   }
 
-  console.log(user);
   if (!user) {
     return <Navigate to="/login" replace />;
   }

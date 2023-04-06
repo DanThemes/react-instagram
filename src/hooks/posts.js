@@ -6,6 +6,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  where,
 } from "firebase/firestore";
 import { db, storage } from "../firebase/firebase";
 import { useEffect, useState } from "react";
@@ -16,13 +17,21 @@ import {
   ref,
   uploadBytes,
 } from "firebase/storage";
-import { useAuthContext } from "../context/AuthProvider";
 
-export const usePosts = () => {
+export const usePosts = (uid = null) => {
   const [posts, setPosts] = useState(null);
 
   useEffect(() => {
-    const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+    let q;
+    if (uid) {
+      q = query(
+        collection(db, "posts"),
+        where("uid", "==", uid),
+        orderBy("createdAt", "desc")
+      );
+    } else {
+      q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+    }
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const postsArray = querySnapshot.docs.map((doc) => ({
         id: doc.id,

@@ -5,7 +5,7 @@ import Nav from "./Nav";
 const Header = () => {
   return (
     <header id="site-header">
-      <div className="site-header-bg">
+      <div id="site-header-content">
         <div className="container">
           <div className="logo-wrapper">
             <Link to="/">
@@ -17,6 +17,7 @@ const Header = () => {
           </div>
         </div>
       </div>
+      <div className="site-header-bg"></div>
     </header>
   );
 };

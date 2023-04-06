@@ -28,6 +28,10 @@ const Nav = () => {
               <li>
                 <NavLink to="/profile">Profile</NavLink>
               </li>
+
+              <li>
+                <NavLink to="/update-profile">Update Profile</NavLink>
+              </li>
               <li>
                 <Link onClick={(e) => logout(e)}>Logout</Link>
               </li>

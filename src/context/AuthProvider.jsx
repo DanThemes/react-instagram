@@ -73,6 +73,7 @@ export const AuthProvider = ({ children }) => {
       if (!user) {
         dispatch({ type: "SET_USER", payload: null });
         dispatch({ type: "SET_LOADING", payload: false });
+        // navigate("/login");
         return;
       }
 
@@ -84,11 +85,22 @@ export const AuthProvider = ({ children }) => {
         const userData = usersRef.docs[0].data();
         dispatch({ type: "SET_USER", payload: userData });
         dispatch({ type: "SET_LOADING", payload: false });
+        // navigate("/");
       }
     });
 
     return unsubscribe;
   }, [auth]);
+
+  // Redirect user after user state change
+  useEffect(() => {
+    if (state.isLoading) return;
+    if (!state.user) {
+      navigate("/login");
+    } else {
+      navigate("/");
+    }
+  }, [state.user]);
 
   // Register
   const createAccount = async (email, username, password) => {

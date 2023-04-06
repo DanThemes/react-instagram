@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import ProtectedPage from "./components/ProtectedPage";
+import ProfileUpdate from "./pages/ProfileUpdate";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedPage>
             <Profile />
+          </ProtectedPage>
+        ),
+      },
+      {
+        path: "/update-profile",
+        element: (
+          <ProtectedPage>
+            <ProfileUpdate />
           </ProtectedPage>
         ),
       },
