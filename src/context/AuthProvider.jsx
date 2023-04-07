@@ -98,7 +98,8 @@ export const AuthProvider = ({ children }) => {
     if (!state.user) {
       navigate("/login");
     } else {
-      navigate("/");
+      // Doesn't work well
+      // navigate("/");
     }
   }, [state.user]);
 

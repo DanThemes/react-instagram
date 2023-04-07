@@ -26,7 +26,7 @@ const Nav = () => {
           {user ? (
             <>
               <li>
-                <NavLink to="/profile">Profile</NavLink>
+                <NavLink to={`/profile/${user.username}`}>Profile</NavLink>
               </li>
 
               <li>

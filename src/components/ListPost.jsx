@@ -4,6 +4,8 @@ import { useUser } from "../hooks/users";
 import { formatDistance } from "date-fns";
 import Avatar from "./Avatar";
 import { useAuthContext } from "../context/AuthProvider";
+import NewComment from "./comments/NewComment";
+import Comments from "./comments/Comments";
 
 const Post = ({ post }) => {
   const { user, isLoading, error } = useUser(post.uid);
@@ -47,19 +49,9 @@ const Post = ({ post }) => {
           </p>
         </div>
 
-        {/* Add new comment */}
-        {auth.user && (
-          <div className="post-new-comment">
-            <input type="text" placeholder="Add a comment..." />
-          </div>
-        )}
+        {auth.user && <NewComment uid={auth?.user?.uid} pid={post.id} />}
 
-        {/* All comments */}
-        <div className="post-comments">
-          <div className="post-comment">comment</div>
-          <div className="post-comment">comment</div>
-          <div className="post-comment">comment</div>
-        </div>
+        <Comments comments={post.comments || []} />
       </div>
     </div>
   );

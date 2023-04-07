@@ -41,7 +41,7 @@ export const usePosts = (uid = null) => {
     });
 
     return unsubscribe;
-  }, []);
+  }, [uid]);
 
   return posts;
 };

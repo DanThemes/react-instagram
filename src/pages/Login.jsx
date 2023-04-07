@@ -29,7 +29,7 @@ const Login = () => {
     <div>
       <h1>Login</h1>
 
-      <form onSubmit={handleSubmit(handleLogin)} className="form-auth">
+      <form onSubmit={handleSubmit(handleLogin)} className="auth-form">
         <label htmlFor="username">Username:</label>
         <input type="text" {...register("username")} />
         {errors.username && (

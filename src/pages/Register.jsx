@@ -9,7 +9,7 @@ const registerSchema = yup.object().shape({
   username: yup
     .string()
     .min(3, "Username must be at least 3 characters long")
-    .max(50, "Username must be at most 50 characters")
+    .max(25, "Username must be at most 25 characters")
     .required("Required"),
   password: yup
     .string()
@@ -40,7 +40,7 @@ const Register = () => {
     <div>
       <h1>Register</h1>
 
-      <form onSubmit={handleSubmit(handleRegister)} className="form-auth">
+      <form onSubmit={handleSubmit(handleRegister)} className="auth-form">
         <label htmlFor="username">Username:</label>
         <input type="text" {...register("username")} />
         {errors.username && (

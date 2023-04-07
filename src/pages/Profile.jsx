@@ -1,11 +1,12 @@
 import React from "react";
 import Posts from "../components/Posts";
-import { useAuthContext } from "../context/AuthProvider";
+import { useParams } from "react-router-dom";
+import { useUser } from "../hooks/users";
 
 const Profile = () => {
-  const {
-    auth: { user, isLoading, error },
-  } = useAuthContext();
+  const { username } = useParams();
+
+  const { user, isLoading, error } = useUser(username);
 
   if (isLoading) {
     return "Loading";
@@ -17,7 +18,8 @@ const Profile = () => {
 
   return (
     <div>
-      <h1>Profile</h1>
+      {console.log(user)}
+      <h1>{username}</h1>
 
       <Posts uid={user.uid} />
     </div>

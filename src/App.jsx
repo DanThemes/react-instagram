@@ -29,12 +29,8 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "/profile",
-        element: (
-          <ProtectedPage>
-            <Profile />
-          </ProtectedPage>
-        ),
+        path: "/profile/:username",
+        element: <Profile />,
       },
       {
         path: "/update-profile",

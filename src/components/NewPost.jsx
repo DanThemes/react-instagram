@@ -48,7 +48,7 @@ const NewPost = () => {
 
   return (
     <div className="new-post">
-      <form onSubmit={handleSubmit(handleNewPost)} className="form-auth">
+      <form onSubmit={handleSubmit(handleNewPost)} className="auth-form">
         <label htmlFor="photo">Upload photo:</label>
         <input type="file" {...register("photo")} />
         {errors.photo && (

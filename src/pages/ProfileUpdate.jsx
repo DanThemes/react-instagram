@@ -57,7 +57,7 @@ const ProfileUpdate = () => {
       Bio: {user.bio}
       <hr />
       {console.log(user)}
-      <form onSubmit={handleSubmit(handleUpdateProfile)} className="form-auth">
+      <form onSubmit={handleSubmit(handleUpdateProfile)} className="auth-form">
         <label htmlFor="avatar">Avatar:</label>
         <input type="file" {...register("avatar")} />
         {errors.avatar && (
