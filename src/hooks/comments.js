@@ -29,9 +29,11 @@ export const useNewComment = async (data) => {
 };
 
 export const useComments = (pid) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [comments, setComments] = useState(null);
 
   useEffect(() => {
+    setIsLoading(true);
     const q = query(
       collection(db, "comments"),
       where("pid", "==", pid),
@@ -44,12 +46,13 @@ export const useComments = (pid) => {
         ...doc.data(),
       }));
       setComments(commentsArray);
+      setIsLoading(false);
     });
 
     return unsubscribe;
   }, [pid]);
 
-  return comments;
+  return { comments, isLoading };
 };
 
 export const useDeleteComment = async (id) => {

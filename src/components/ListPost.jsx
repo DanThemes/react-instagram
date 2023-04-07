@@ -6,6 +6,7 @@ import Avatar from "./Avatar";
 import { useAuthContext } from "../context/AuthProvider";
 import NewComment from "./comments/NewComment";
 import Comments from "./comments/Comments";
+import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid";
 
 const Post = ({ post }) => {
   const { user, isLoading, error } = useUser(post.uid);
@@ -31,8 +32,27 @@ const Post = ({ post }) => {
         <div className="post-header-left">
           <Avatar uid={post.uid} size="small" />
         </div>
-        <div className="post-header-right" onClick={handleDelete}>
-          {isAuthor && <span className="delete-button">Delete</span>}
+        <div className="post-header-right">
+          <EllipsisHorizontalIcon />
+
+          <ul>
+            <li>
+              <span>Item 1</span>
+            </li>
+            <li>
+              <span>Item 2</span>
+            </li>
+            <li>
+              <span>Item 3</span>
+            </li>
+            {isAuthor && (
+              <li>
+                <span className="delete-button" onClick={handleDelete}>
+                  Delete
+                </span>
+              </li>
+            )}
+          </ul>
         </div>
       </div>
       <div className="post-image">

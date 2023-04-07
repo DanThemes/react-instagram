@@ -30,7 +30,7 @@ li {
   list-style: none;
 }
 
-input[type="text"],
+input:not([type="file"]),
 textarea {
   resize: none;
   display: block;
@@ -47,7 +47,7 @@ p {
 a {
   color: #000;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-in-out;
 }
 
 img {
@@ -171,6 +171,42 @@ button {
 
       .delete-button {
         cursor: pointer;
+      }
+
+      .post-header-right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        position: relative;
+
+        svg {
+          cursor: pointer;
+          width: 1rem;
+          height: auto;
+        }
+
+        ul {
+          position: absolute;
+          top: 1rem;
+          right: 0;
+          background: #fff;
+          z-index: 9;
+          width: 8rem;
+          border-radius: 0.5rem;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.09);
+          padding: 0.5rem 0;
+
+          li {
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+
+            &:hover {
+              background: #61896d;
+              color: #fff;
+            }
+          }
+        }
       }
     }
 

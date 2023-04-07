@@ -4,23 +4,28 @@ import { formatDistance } from "date-fns";
 import { useDeleteComment, useToggleLikeComment } from "../../hooks/comments";
 import { HeartIcon } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartOutlineIcon } from "@heroicons/react/24/outline";
+import { useAuthContext } from "../../context/AuthProvider";
 
 const Comment = ({ comment }) => {
   const { user, isLoading } = useUser(comment.uid);
+  const {
+    auth,
+    auth: { isloading: isAuthLoading },
+  } = useAuthContext();
 
-  if (isLoading) {
+  if (isLoading || isAuthLoading) {
     return;
   }
 
   const commentNumber = comment.likes.length;
-  const isLiked = comment.likes.includes(user.uid);
+  const isLiked = comment.likes.includes(auth.user.uid);
 
   const handleDeleteComment = async () => {
     await useDeleteComment(comment.id);
   };
 
   const handleToggleLikeComment = async () => {
-    await useToggleLikeComment(comment.uid, comment.id);
+    await useToggleLikeComment(auth.user.uid, comment.id);
   };
 
   return (

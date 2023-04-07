@@ -42,7 +42,6 @@ const NewComment = ({ uid, pid }) => {
 
   const handleTextareaPress = (e) => {
     if (e.key === "Enter" && e.shiftKey === false) {
-      console.log("enter");
       handleNewComment();
     }
   };
