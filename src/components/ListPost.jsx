@@ -51,7 +51,7 @@ const Post = ({ post }) => {
 
         {auth.user && <NewComment uid={auth?.user?.uid} pid={post.id} />}
 
-        <Comments comments={post.comments || []} />
+        <Comments pid={post.id} />
       </div>
     </div>
   );

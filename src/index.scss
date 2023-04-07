@@ -126,7 +126,7 @@ button {
     display: block;
     width: 100%;
     border: 1px solid #e5e5e5;
-    padding: 0.5rem 1.5rem;
+    padding: 0.5rem;
     border-radius: 3px;
   }
 
@@ -173,6 +173,16 @@ button {
 
       .post-comments {
         .post-comment {
+          display: flex;
+          align-items: center;
+
+          .post-comment-author {
+            font-weight: bold;
+            margin-right: 0.5rem;
+          }
+
+          .post-comment-content {
+          }
         }
       }
     }
