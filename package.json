@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.0.17",
     "@hookform/resolvers": "^3.0.0",
     "@reduxjs/toolkit": "^1.9.3",
     "date-fns": "^2.29.3",

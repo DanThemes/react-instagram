@@ -16,6 +16,11 @@ body {
   overflow-x: hidden;
 }
 
+::selection {
+  background-color: #61896d;
+  color: #fff;
+}
+
 ul,
 li {
   padding: 0;
@@ -38,6 +43,11 @@ a {
 img {
   max-width: 100%;
   height: auto;
+  vertical-align: middle;
+}
+
+svg {
+  vertical-align: middle;
 }
 
 button {
@@ -160,28 +170,86 @@ button {
     }
 
     .post-footer {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-gap: 1rem;
       padding: 1rem;
 
       .post-content {
-        border-top: 1px solid #eee;
-        margin: 1rem 0;
-        padding-top: 1rem;
       }
 
       .post-new-comment {
       }
 
       .post-comments {
-        .post-comment {
-          display: flex;
-          align-items: center;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 0.5rem;
+        font-size: 0.75rem;
 
-          .post-comment-author {
-            font-weight: bold;
-            margin-right: 0.5rem;
+        .post-comment {
+          display: grid;
+          grid-template-columns: 1fr;
+          grid-gap: 0.25rem;
+
+          & ~ .post-comment {
+            border-top: 1px solid #eee;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
           }
 
           .post-comment-content {
+            display: flex;
+            align-items: flex-start;
+            // display: grid;
+            // grid-template-columns: auto 1fr 2rem;
+
+            & > div ~ div {
+              padding-left: 0.5rem;
+            }
+
+            .post-comment-author {
+            }
+
+            .post-comment-text {
+              flex: 1;
+            }
+
+            .post-comment-like {
+              cursor: pointer;
+              // flex: 1rem;
+              // flex-grow: 0;
+              display: flex;
+              align-items: center;
+              justify-content: flex-end;
+
+              svg {
+                width: 1rem;
+                height: auto;
+              }
+            }
+          }
+
+          .post-comment-footer {
+            display: flex;
+            align-items: center;
+            font-size: 0.75rem;
+
+            span {
+              ~ span {
+                padding-left: 2rem;
+              }
+            }
+
+            .post-comment-footer-likes {
+            }
+            .post-comment-footer-reply {
+              cursor: pointer;
+            }
+            .post-comment-footer-delete {
+              cursor: pointer;
+              color: #ce5b5b;
+            }
           }
         }
       }
