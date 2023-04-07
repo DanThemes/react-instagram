@@ -6,7 +6,7 @@ import { HeartIcon } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartOutlineIcon } from "@heroicons/react/24/outline";
 
 const Comment = ({ comment }) => {
-  const { user, isLoading, error } = useUser(comment.uid);
+  const { user, isLoading } = useUser(comment.uid);
 
   if (isLoading) {
     return;
@@ -25,11 +25,13 @@ const Comment = ({ comment }) => {
 
   return (
     <div className="post-comment">
-      <div className="post-comment-content">
-        <div className="post-comment-author">
-          <strong>{user?.username}</strong>:
+      <div className="post-comment-header">
+        <div className="post-comment-content">
+          <span className="post-comment-author">
+            <strong>{user?.username}</strong>:
+          </span>
+          <span className="post-comment-text">{comment.comment}</span>
         </div>
-        <div className="post-comment-text">{comment.comment}</div>
         <div className="post-comment-like" onClick={handleToggleLikeComment}>
           {isLiked ? <HeartIcon /> : <HeartOutlineIcon />}
         </div>
@@ -39,7 +41,7 @@ const Comment = ({ comment }) => {
           {formatDistance(comment.createdAt, Date.now())}
         </span>
         <span className="post-comment-footer-likes">
-          {commentNumber} {commentNumber > 0 ? "likes" : "like"}
+          {commentNumber} {commentNumber === 1 ? "like" : "likes"}
         </span>
         <span className="post-comment-footer-reply">Reply</span>
         <span

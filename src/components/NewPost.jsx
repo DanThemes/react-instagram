@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNewPost } from "../hooks/posts";
 import { useAuthContext } from "../context/AuthProvider";
+import TextareaAutosize from "react-textarea-autosize";
 
 const newPostSchema = yup.object().shape({
   photo: yup
@@ -56,7 +57,12 @@ const NewPost = () => {
         )}
 
         <label htmlFor="description">Description</label>
-        <textarea cols="30" rows="3" {...register("description")}></textarea>
+        <TextareaAutosize
+          maxRows="10"
+          minRows="3"
+          {...register("description")}
+          placeholder="Add a post"
+        />
         {errors.description && (
           <div className="form-error-message">{errors.description.message}</div>
         )}

@@ -30,6 +30,16 @@ li {
   list-style: none;
 }
 
+input[type="text"],
+textarea {
+  resize: none;
+  display: block;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  padding: 0.5rem;
+  border-radius: 3px;
+}
+
 p {
   margin: 0;
 }
@@ -133,11 +143,6 @@ button {
 
   input:not([type="file"]),
   textarea {
-    display: block;
-    width: 100%;
-    border: 1px solid #e5e5e5;
-    padding: 0.5rem;
-    border-radius: 3px;
   }
 
   .form-error-message {
@@ -176,9 +181,18 @@ button {
       padding: 1rem;
 
       .post-content {
+        .post-author {
+          padding-right: 0.25rem;
+        }
+      }
+
+      .post-date {
+        font-size: 0.75rem;
       }
 
       .post-new-comment {
+        textarea {
+        }
       }
 
       .post-comments {
@@ -198,7 +212,7 @@ button {
             padding-top: 0.5rem;
           }
 
-          .post-comment-content {
+          .post-comment-header {
             display: flex;
             align-items: flex-start;
             // display: grid;
@@ -209,9 +223,10 @@ button {
             }
 
             .post-comment-author {
+              padding-right: 0.25rem;
             }
 
-            .post-comment-text {
+            .post-comment-content {
               flex: 1;
             }
 
