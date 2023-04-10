@@ -13,17 +13,46 @@ import {
 } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useEffect } from "react";
+import { useRef } from "react";
 
 const Post = ({ post }) => {
+  const [toggleMenu, setToggleMenu] = useState(false);
   const [isUpdatingPostText, setIsUpdatingPostText] = useState(false);
   const [updatedPostText, setUpdatedPostText] = useState(() => post.text);
   const { user, isLoading, error } = useUser(post.uid);
   const { auth } = useAuthContext();
   const isAuthor = post.uid === auth?.user?.uid;
+  const postMenu = useRef();
 
-  // console.log(post);
+  useEffect(() => {
+    const toggleMenuOnClick = (e) => {
+      if (
+        postMenu.current &&
+        toggleMenu &&
+        !postMenu.current.contains(e.target)
+      ) {
+        console.log(toggleMenu);
+        console.log(postMenu.current);
+        console.log(e.target);
+        handleCloseMenuOnClickOutside();
+      }
+    };
+
+    document.addEventListener("click", toggleMenuOnClick);
+
+    return () => {
+      document.removeEventListener("click", toggleMenuOnClick);
+    };
+  }, [postMenu, toggleMenu]);
+
+  const handleCloseMenuOnClickOutside = () => {
+    setToggleMenu(false);
+  };
+
   const handleDelete = async () => {
     await useDeletePost(auth?.user?.uid, post.id);
+    setToggleMenu(false);
   };
 
   const handleCancelUpdate = () => {
@@ -33,6 +62,7 @@ const Post = ({ post }) => {
 
   const handleEditButtonClick = () => {
     setIsUpdatingPostText(true);
+    setToggleMenu(false);
     setUpdatedPostText(post.text);
   };
 
@@ -63,9 +93,19 @@ const Post = ({ post }) => {
         </div>
         <div className="post-header-right">
           {isAuthor && (
-            <>
+            <div
+              className="post-menu"
+              ref={postMenu}
+              // doesnt't work well
+              // instead call a different function
+              // which handles the toggling,
+              // now every click inside this element will
+              // set the menu to true, so it will not close
+              // on child element click
+              onClick={() => setToggleMenu(true)}
+            >
               <EllipsisHorizontalIcon />
-              <ul>
+              <ul className={toggleMenu ? "visible" : ""}>
                 <li onClick={handleEditButtonClick}>
                   <span>
                     <PencilIcon />
@@ -80,7 +120,7 @@ const Post = ({ post }) => {
                   </span>
                 </li>
               </ul>
-            </>
+            </div>
           )}
         </div>
       </div>
@@ -96,7 +136,6 @@ const Post = ({ post }) => {
             </span>
             {isUpdatingPostText ? (
               <>
-                {console.log(updatedPostText)}
                 <textarea
                   value={updatedPostText}
                   onChange={(e) => setUpdatedPostText(e.target.value)}
