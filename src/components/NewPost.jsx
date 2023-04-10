@@ -25,7 +25,7 @@ const newPostSchema = yup.object().shape({
         files.length === 0 || // Check if `files` is not an empty list
         Array.from(files).every((file) => file.size <= 2_000_000)
     ),
-  description: yup.string().required("Required"),
+  text: yup.string().required("Required"),
 });
 
 const NewPost = () => {
@@ -56,15 +56,15 @@ const NewPost = () => {
           <div className="form-error-message">{errors.photo.message}</div>
         )}
 
-        <label htmlFor="description">Description</label>
+        <label htmlFor="text">Text</label>
         <TextareaAutosize
           maxRows="10"
           minRows="3"
-          {...register("description")}
+          {...register("text")}
           placeholder="Add a post"
         />
-        {errors.description && (
-          <div className="form-error-message">{errors.description.message}</div>
+        {errors.text && (
+          <div className="form-error-message">{errors.text.message}</div>
         )}
 
         <button type="submit">Add Post</button>

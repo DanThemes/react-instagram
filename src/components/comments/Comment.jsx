@@ -12,6 +12,7 @@ const Comment = ({ comment }) => {
     auth,
     auth: { isloading: isAuthLoading },
   } = useAuthContext();
+  const isAuthor = comment.uid === auth?.user?.uid;
 
   if (isLoading || isAuthLoading) {
     return;
@@ -21,7 +22,7 @@ const Comment = ({ comment }) => {
   const isLiked = comment.likes.includes(auth.user.uid);
 
   const handleDeleteComment = async () => {
-    await useDeleteComment(comment.id);
+    await useDeleteComment(auth.user.uid, comment.id);
   };
 
   const handleToggleLikeComment = async () => {
@@ -49,12 +50,14 @@ const Comment = ({ comment }) => {
           {commentNumber} {commentNumber === 1 ? "like" : "likes"}
         </span>
         <span className="post-comment-footer-reply">Reply</span>
-        <span
-          className="post-comment-footer-delete"
-          onClick={handleDeleteComment}
-        >
-          Delete
-        </span>
+        {isAuthor && (
+          <span
+            className="post-comment-footer-delete"
+            onClick={handleDeleteComment}
+          >
+            Delete
+          </span>
+        )}
       </div>
     </div>
   );

@@ -191,7 +191,7 @@ button {
           right: 0;
           background: #fff;
           z-index: 9;
-          width: 8rem;
+          min-width: 8rem;
           border-radius: 0.5rem;
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.09);
           padding: 0.5rem 0;
@@ -204,6 +204,21 @@ button {
             &:hover {
               background: #61896d;
               color: #fff;
+            }
+
+            &.delete-button {
+              &:hover {
+                background-color: #b64747;
+              }
+            }
+
+            span {
+              display: flex;
+              align-items: center;
+
+              svg {
+                margin-right: 0.5rem;
+              }
             }
           }
         }
@@ -219,6 +234,12 @@ button {
       .post-content {
         .post-author {
           padding-right: 0.25rem;
+        }
+
+        .post-update-buttons {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
         }
       }
 

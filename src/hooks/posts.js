@@ -3,9 +3,11 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { db, storage } from "../firebase/firebase";
@@ -47,7 +49,7 @@ export const usePosts = (uid = null) => {
 };
 
 export const useNewPost = async (data, user) => {
-  const { photo, description } = data;
+  const { photo, text } = data;
   const storageRef = ref(storage, `photos/${Date.now()}_${photo[0].name}`);
 
   try {
@@ -61,7 +63,7 @@ export const useNewPost = async (data, user) => {
     await addDoc(collection(db, "posts"), {
       uid: user.uid, // undefined here
       photo: photoUrl,
-      description,
+      text,
       createdAt: Date.now(),
     });
     toast.success("Post added");
@@ -70,22 +72,43 @@ export const useNewPost = async (data, user) => {
   }
 };
 
-export const useDeletePost = async (uid, post) => {
-  if (post.uid !== uid) {
-    toast.error("You're not allowed to delete this post");
-    return;
-  }
-  const confirmDelete = confirm("Are you sure you want to delete this post?");
-  if (!confirmDelete) return;
-
+export const useDeletePost = async (uid, pid) => {
   try {
-    const postRef = doc(db, "posts", post.id);
-    await deleteDoc(postRef);
+    const postRef = doc(db, "posts", pid);
+    const post = await getDoc(postRef);
 
-    const photoRef = ref(storage, post.photo);
+    const photoRef = ref(storage, post.data().photo);
+    const postUid = post.data().uid;
+
+    if (postUid !== uid) {
+      toast.error("You're not allowed to delete this post");
+      return;
+    }
+
+    const confirmDelete = confirm("Are you sure you want to delete this post?");
+    if (!confirmDelete) return;
+
+    await deleteDoc(postRef);
     await deleteObject(photoRef);
 
     toast.success("Post deleted");
+  } catch (error) {
+    console.log(error.message);
+    toast.error(error.message);
+  }
+};
+
+export const useEditPost = async (uid, post) => {
+  try {
+    if (post.uid !== uid) {
+      toast.error("You're not allowed to edit this post");
+      return;
+    }
+
+    const postRef = doc(db, "posts", post.id);
+
+    await updateDoc(postRef, post);
+    toast.success("Post updated");
   } catch (error) {
     console.log(error.message);
     toast.error(error.message);

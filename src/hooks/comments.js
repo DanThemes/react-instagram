@@ -55,9 +55,18 @@ export const useComments = (pid) => {
   return { comments, isLoading };
 };
 
-export const useDeleteComment = async (id) => {
+export const useDeleteComment = async (uid, id) => {
   try {
     const commentRef = doc(db, "comments", id);
+    const comment = await getDoc(commentRef);
+
+    if (comment.data().uid !== uid) {
+      toast.error("You're not allowed to delete this post");
+      return;
+    }
+    const confirmDelete = confirm("Are you sure you want to delete this post?");
+    if (!confirmDelete) return;
+
     await deleteDoc(commentRef);
     toast.success("Comment deleted");
   } catch (error) {
