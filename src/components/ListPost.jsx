@@ -96,7 +96,7 @@ const Post = ({ post }) => {
             <div
               className="post-menu"
               ref={postMenu}
-              // doesnt't work well
+              // doesn't work well
               // instead call a different function
               // which handles the toggling,
               // now every click inside this element will
