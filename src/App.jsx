@@ -6,6 +6,7 @@ import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import ProtectedPage from "./components/ProtectedPage";
 import ProfileUpdate from "./pages/ProfileUpdate";
+import Search from "./pages/Search";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
             <ProfileUpdate />
           </ProtectedPage>
         ),
+      },
+      {
+        path: "/search",
+        element: <Search />,
       },
     ],
   },

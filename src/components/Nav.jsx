@@ -23,12 +23,14 @@ const Nav = () => {
           <li>
             <NavLink to="/">Home</NavLink>
           </li>
+          <li>
+            <NavLink to="/search">Search</NavLink>
+          </li>
           {user ? (
             <>
               <li>
                 <NavLink to={`/profile/${user.username}`}>Profile</NavLink>
               </li>
-
               <li>
                 <NavLink to="/update-profile">Update Profile</NavLink>
               </li>

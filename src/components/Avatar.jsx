@@ -5,13 +5,17 @@ import { NavLink } from "react-router-dom";
 const Avatar = ({ uid, size = "medium", showUsername = true }) => {
   const { user, isLoading, error } = useUser(uid);
 
-  if (isLoading) {
-    return "Loading";
+  if (!user) {
+    return;
   }
 
-  if (error) {
-    return "Loading";
-  }
+  // if (isLoading) {
+  //   return "Loading";
+  // }
+
+  // if (error) {
+  //   return "Loading";
+  // }
 
   return (
     <div className={`avatar avatar-${size}`}>

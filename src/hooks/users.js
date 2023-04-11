@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, and, or } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { useEffect, useState } from "react";
 
@@ -41,4 +41,56 @@ export const useUser = (idOrUsername) => {
   }, [idOrUsername]);
 
   return { user, isLoading, error };
+};
+
+export const useSearchUsers = (keyword) => {
+  const [result, setResult] = useState([]);
+
+  useEffect(() => {
+    const searchUsers = async () => {
+      try {
+        if (!keyword) return;
+
+        const q = query(
+          collection(db, "users"),
+          or(
+            // query as-is:
+            and(
+              where("username", ">=", keyword),
+              where("username", "<=", keyword + "\uf8ff")
+            ),
+            // capitalize first letter:
+            and(
+              where(
+                "username",
+                ">=",
+                keyword.charAt(0).toUpperCase() + keyword.slice(1)
+              ),
+              where(
+                "username",
+                "<=",
+                keyword.charAt(0).toUpperCase() + keyword.slice(1) + "\uf8ff"
+              )
+            ),
+            // lowercase:
+            and(
+              where("username", ">=", keyword.toLowerCase()),
+              where("username", "<=", keyword.toLowerCase() + "\uf8ff")
+            )
+          )
+        );
+        const querySnapshot = await getDocs(q);
+        const resultData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setResult(resultData);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    searchUsers();
+  }, [keyword]);
+
+  return result;
 };
