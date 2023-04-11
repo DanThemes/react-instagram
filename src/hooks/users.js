@@ -44,10 +44,13 @@ export const useUser = (idOrUsername) => {
 };
 
 export const useSearchUsers = (keyword) => {
-  const [result, setResult] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const searchUsers = async () => {
+      setIsLoading(true);
+
       try {
         if (!keyword) return;
 
@@ -84,13 +87,15 @@ export const useSearchUsers = (keyword) => {
           id: doc.id,
           ...doc.data(),
         }));
-        setResult(resultData);
+        setUsers(resultData);
       } catch (error) {
         console.log(error.message);
+      } finally {
+        setIsLoading(false);
       }
     };
     searchUsers();
   }, [keyword]);
 
-  return result;
+  return { users, isLoading };
 };

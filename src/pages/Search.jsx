@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useSearchUsers } from "../hooks/users";
-import { useEffect } from "react";
 import SearchResults from "../components/SearchResults";
 
 const searchSchema = yup.object().shape({
