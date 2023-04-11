@@ -26,23 +26,23 @@ const Post = ({ post }) => {
   const postMenu = useRef();
 
   useEffect(() => {
-    const toggleMenuOnClick = (e) => {
+    const closeMenuOnClickOutside = (e) => {
       if (
         postMenu.current &&
         toggleMenu &&
         !postMenu.current.contains(e.target)
       ) {
-        console.log(toggleMenu);
-        console.log(postMenu.current);
-        console.log(e.target);
+        // console.log(toggleMenu);
+        // console.log(postMenu.current);
+        // console.log(e.target);
         handleCloseMenuOnClickOutside();
       }
     };
 
-    document.addEventListener("click", toggleMenuOnClick);
+    document.addEventListener("click", closeMenuOnClickOutside);
 
     return () => {
-      document.removeEventListener("click", toggleMenuOnClick);
+      document.removeEventListener("click", closeMenuOnClickOutside);
     };
   }, [postMenu, toggleMenu]);
 
@@ -102,9 +102,11 @@ const Post = ({ post }) => {
               // now every click inside this element will
               // set the menu to true, so it will not close
               // on child element click
-              onClick={() => setToggleMenu(true)}
+              // onClick={e => handleOpenMenu(e)}
             >
-              <EllipsisHorizontalIcon />
+              <EllipsisHorizontalIcon
+                onClick={() => setToggleMenu((prev) => !prev)}
+              />
               <ul className={toggleMenu ? "visible" : ""}>
                 <li onClick={handleEditButtonClick}>
                   <span>
