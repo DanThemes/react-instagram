@@ -1,15 +1,52 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import Popup from "reactjs-popup";
-import UsersList from "./UsersList";
+import FollowingFollowersList from "./FollowingFollowersList";
+import FollowUnfollowButton from "./FollowUnfollowButton";
+import { useAuthContext } from "../context/AuthProvider";
+import AvatarStats from "./AvatarStats";
+import { useState } from "react";
+import { useFollowUser, useUnfollowUser } from "../hooks/users";
 
 const Avatar = ({
   user,
   size = "medium",
   showUsername = true,
-  followers = true,
-  following = true,
+  stats = true,
+  button = true,
 }) => {
+  const { auth } = useAuthContext();
+
+  const [isFollowing, setIsFollowing] = useState(null);
+  const [isLoadingFollowing, setIsLoadingFollowing] = useState(false);
+
+  const handleFollowUser = async (cUser, oUser) => {
+    try {
+      setIsLoadingFollowing(true);
+      await useFollowUser(cUser.uid, oUser.uid);
+      setIsFollowing(true);
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setIsLoadingFollowing(false);
+    }
+  };
+
+  const handleUnfollowUser = async (cUser, oUser) => {
+    try {
+      setIsLoadingFollowing(true);
+      await useUnfollowUser(cUser.uid, oUser.uid);
+      setIsFollowing(false);
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setIsLoadingFollowing(false);
+    }
+  };
+
+  // !!!!!!!!!!!!
+  // set a onSnapshot listener to make sure you always have the latest data of the "user" prop, maybe use the uid instead...
+
   return (
     <div className={`avatar avatar-${size}`}>
       {user.avatar && <img src={user.avatar} alt={user.username} />}
@@ -18,45 +55,19 @@ const Avatar = ({
           <NavLink to={`/profile/${user.username}`} className="avatar-username">
             {user.username}
           </NavLink>
-          {(followers || following) && (
-            <p className="followers-following">
-              {followers &&
-                (user.followers.length ? (
-                  <Popup
-                    trigger={
-                      <span className="not-empty">
-                        {user.followers.length} followers
-                      </span>
-                    }
-                    position="right center"
-                    modal
-                  >
-                    <UsersList uids={user.followers} />
-                  </Popup>
-                ) : (
-                  <span>{user.followers.length} followers</span>
-                ))}
-              {following &&
-                (user.following.length ? (
-                  <Popup
-                    trigger={
-                      <span className="not-empty">
-                        {user.following.length} following
-                      </span>
-                    }
-                    position="right center"
-                    modal
-                  >
-                    <UsersList uids={user.following} />
-                  </Popup>
-                ) : (
-                  <span className="not-empty">
-                    {user.following.length} following
-                  </span>
-                ))}
-            </p>
-          )}
+          {stats && <AvatarStats user={user} />}
         </div>
+      )}
+      {button && (
+        <FollowUnfollowButton
+          currentUser={auth.user}
+          otherUser={user}
+          handleFollowUser={handleFollowUser}
+          handleUnfollowUser={handleUnfollowUser}
+          isLoadingFollowing={isLoadingFollowing}
+          isFollowing={isFollowing}
+          setIsFollowing={setIsFollowing}
+        />
       )}
     </div>
   );
