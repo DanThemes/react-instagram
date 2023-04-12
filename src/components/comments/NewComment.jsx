@@ -6,6 +6,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import TextareaAutosize from "react-textarea-autosize";
 import { useNewComment } from "../../hooks/comments";
+import Loading from "../Loading";
 
 const newCommentSchema = yup.object().shape({
   comment: yup.string().required("Required"),
@@ -27,7 +28,7 @@ const NewComment = ({ uid, pid }) => {
   } = useAuthContext();
 
   if (isLoading) {
-    return "Loading";
+    return <Loading />;
   }
 
   if (error) {
@@ -48,7 +49,7 @@ const NewComment = ({ uid, pid }) => {
 
   return (
     <div className="post-new-comment">
-      <Avatar uid={user.uid} size="small" showUsername={false} />
+      <Avatar user={user} size="small" showUsername={false} />
       <form onSubmit={handleSubmit(handleNewComment)} className="comment-form">
         <TextareaAutosize
           maxRows="5"

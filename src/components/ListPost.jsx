@@ -89,7 +89,7 @@ const Post = ({ post }) => {
     <div className="post">
       <div className="post-header">
         <div className="post-header-left">
-          <Avatar uid={post.uid} size="small" />
+          <Avatar user={user} size="small" />
         </div>
         <div className="post-header-right">
           {isAuthor && (

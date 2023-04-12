@@ -1,27 +1,46 @@
 import React from "react";
 import Posts from "../components/Posts";
 import { useParams } from "react-router-dom";
-import { useUser } from "../hooks/users";
+import { useFollowUser, useUnfollowUser, useUser } from "../hooks/users";
+import { useAuthContext } from "../context/AuthProvider";
+import Loading from "../components/Loading";
+import Avatar from "../components/Avatar";
 
 const Profile = () => {
   const { username } = useParams();
 
   const { user, isLoading, error } = useUser(username);
+  const { auth } = useAuthContext();
 
-  if (isLoading) {
-    return "Loading";
+  if (!user || !auth) {
+    return <Loading />;
   }
+  console.log(user);
+  const isMe = user.uid === auth.user.uid;
+  const isFollowing = user.followers.includes(auth.user.uid);
 
-  if (error) {
-    return "Loading";
-  }
+  const handleFollowUser = async () => {
+    await useFollowUser(auth.user.uid, user.uid);
+  };
+
+  const handleUnfollowUser = async () => {
+    await useUnfollowUser(auth.user.uid, user.uid);
+  };
 
   return (
-    <div>
-      {console.log(user)}
-      <h1>{username}</h1>
-
-      <Posts uid={user.uid} />
+    <div className="profile">
+      <div className="profile-header">
+        <Avatar user={user} />
+        {!isMe &&
+          (isFollowing ? (
+            <button onClick={handleUnfollowUser}>Unfollow</button>
+          ) : (
+            <button onClick={handleFollowUser}>Follow</button>
+          ))}
+      </div>
+      <div className="profile-content">
+        <Posts uid={user.uid} />
+      </div>
     </div>
   );
 };

@@ -1,4 +1,15 @@
-import { collection, getDocs, query, where, and, or } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  and,
+  or,
+  updateDoc,
+  doc,
+  getDoc,
+  runTransaction,
+} from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { useEffect, useState } from "react";
 
@@ -98,4 +109,52 @@ export const useSearchUsers = (keyword) => {
   }, [keyword]);
 
   return { users, isLoading };
+};
+
+export const useFollowUser = async (followerUid, followedUid) => {
+  try {
+    const q = query(collection(db, "users"), where("uid", "==", followedUid));
+    const results = await getDocs(q);
+    const followedUser = results.docs[0].data();
+    const followedUserRef = results.docs[0].ref;
+
+    const followers = [...followedUser.followers, followerUid];
+
+    await updateDoc(followedUserRef, {
+      followers,
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const useUnfollowUser = async (followerUid, followedUid) => {
+  try {
+    const q = query(collection(db, "users"), where("uid", "==", followedUid));
+    const results = await getDocs(q);
+    const followedUser = results.docs[0].data();
+    const followedUserRef = results.docs[0].ref;
+
+    const followers = followedUser
+      .data()
+      .followers.filter((uid) => uid !== followerUid);
+
+    await updateDoc(followedUserRef, {
+      followers,
+    });
+
+    // Get a new write batch
+    const batch = writeBatch(db);
+
+    // Replace the bellow placeholder code with the correct code
+
+    // Update docs
+    const sfRef = doc(db, "cities", "SF");
+    batch.update(sfRef, { population: 1000000 });
+
+    // Commit the batch
+    await batch.commit();
+  } catch (error) {
+    console.log(error.message);
+  }
 };

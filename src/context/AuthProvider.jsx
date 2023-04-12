@@ -122,6 +122,8 @@ export const AuthProvider = ({ children }) => {
         displayName: "",
         bio: "",
         avatar: "",
+        following: [],
+        followers: [],
       };
       await addDoc(usersRef, userData);
       toast.success("Account created successfully");
