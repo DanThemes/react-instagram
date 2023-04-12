@@ -32,9 +32,6 @@ const Post = ({ post }) => {
         toggleMenu &&
         !postMenu.current.contains(e.target)
       ) {
-        // console.log(toggleMenu);
-        // console.log(postMenu.current);
-        // console.log(e.target);
         handleCloseMenuOnClickOutside();
       }
     };

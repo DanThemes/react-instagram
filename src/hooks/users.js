@@ -55,6 +55,40 @@ export const useUser = (idOrUsername) => {
   return { user, isLoading, error };
 };
 
+// Get a list of users
+export const useUsers = (uids) => {
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!uids) return;
+
+    // Get user data from "users" collection
+    const getUsers = async () => {
+      try {
+        const docRef = query(collection(db, "users"), where("uid", "in", uids));
+        const docSnapshot = await getDocs(docRef);
+
+        const usersList = docSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        console.log({ usersList });
+
+        setUsers(usersList);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    getUsers();
+  }, [uids]);
+
+  return { users, isLoading, error };
+};
+
 export const useSearchUsers = (keyword) => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
