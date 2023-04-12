@@ -5,26 +5,37 @@ import { useFollowUser, useUnfollowUser, useUser } from "../hooks/users";
 import { useAuthContext } from "../context/AuthProvider";
 import Loading from "../components/Loading";
 import Avatar from "../components/Avatar";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const Profile = () => {
+  const [isFollowing, setIsFollowing] = useState(null);
+
   const { username } = useParams();
 
   const { user, isLoading, error } = useUser(username);
   const { auth } = useAuthContext();
 
+  useEffect(() => {
+    if (!user || !auth) return;
+
+    setIsFollowing(auth.user.following.includes(user.uid));
+  }, [user, auth]);
+
   if (!user || !auth) {
     return <Loading />;
   }
-  console.log(user);
+
   const isMe = user.uid === auth.user.uid;
-  const isFollowing = user.followers.includes(auth.user.uid);
 
   const handleFollowUser = async () => {
     await useFollowUser(auth.user.uid, user.uid);
+    setIsFollowing(true);
   };
 
   const handleUnfollowUser = async () => {
     await useUnfollowUser(auth.user.uid, user.uid);
+    setIsFollowing(false);
   };
 
   return (

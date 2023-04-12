@@ -9,6 +9,7 @@ import {
   doc,
   getDoc,
   runTransaction,
+  writeBatch,
 } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { useEffect, useState } from "react";
@@ -113,16 +114,48 @@ export const useSearchUsers = (keyword) => {
 
 export const useFollowUser = async (followerUid, followedUid) => {
   try {
-    const q = query(collection(db, "users"), where("uid", "==", followedUid));
-    const results = await getDocs(q);
-    const followedUser = results.docs[0].data();
-    const followedUserRef = results.docs[0].ref;
+    const followerQuery = query(
+      collection(db, "users"),
+      where("uid", "==", followerUid)
+    );
+    const followerQueryResult = await getDocs(followerQuery);
+    const followerUser = followerQueryResult.docs[0].data();
+    const followerUserRef = followerQueryResult.docs[0].ref;
 
-    const followers = [...followedUser.followers, followerUid];
+    const followedQuery = query(
+      collection(db, "users"),
+      where("uid", "==", followedUid)
+    );
+    const followedQueryResult = await getDocs(followedQuery);
+    const followedUser = followedQueryResult.docs[0].data();
+    const followedUserRef = followedQueryResult.docs[0].ref;
 
-    await updateDoc(followedUserRef, {
-      followers,
-    });
+    // Batch update
+    try {
+      // Update the followers list of the followed person
+      const followers = [...followedUser.followers, followerUid];
+
+      // Update the following list of the following person
+      const following = [...followerUser.following, followedUid];
+
+      // Get a new write batch
+      const batch = writeBatch(db);
+
+      // Replace the bellow placeholder code with the correct code
+
+      // Update docs
+      batch.update(followerUserRef, {
+        following,
+      });
+      batch.update(followedUserRef, {
+        followers,
+      });
+
+      // Commit the batch
+      await batch.commit();
+    } catch (error) {
+      console.log(error.message);
+    }
   } catch (error) {
     console.log(error.message);
   }
@@ -130,30 +163,52 @@ export const useFollowUser = async (followerUid, followedUid) => {
 
 export const useUnfollowUser = async (followerUid, followedUid) => {
   try {
-    const q = query(collection(db, "users"), where("uid", "==", followedUid));
-    const results = await getDocs(q);
-    const followedUser = results.docs[0].data();
-    const followedUserRef = results.docs[0].ref;
+    const followerQuery = query(
+      collection(db, "users"),
+      where("uid", "==", followerUid)
+    );
+    const followerQueryResult = await getDocs(followerQuery);
+    const followerUser = followerQueryResult.docs[0].data();
+    const followerUserRef = followerQueryResult.docs[0].ref;
 
-    const followers = followedUser
-      .data()
-      .followers.filter((uid) => uid !== followerUid);
+    const followedQuery = query(
+      collection(db, "users"),
+      where("uid", "==", followedUid)
+    );
+    const followedQueryResult = await getDocs(followedQuery);
+    const followedUser = followedQueryResult.docs[0].data();
+    const followedUserRef = followedQueryResult.docs[0].ref;
 
-    await updateDoc(followedUserRef, {
-      followers,
-    });
+    // Batch update
+    try {
+      // Update the followers list of the followed person
+      const followers = followedUser.followers.filter(
+        (uid) => uid !== followerUid
+      );
 
-    // Get a new write batch
-    const batch = writeBatch(db);
+      // Update the following list of the following person
+      const following = followerUser.following.filter(
+        (uid) => uid !== followedUid
+      );
 
-    // Replace the bellow placeholder code with the correct code
+      // Get a new write batch
+      const batch = writeBatch(db);
 
-    // Update docs
-    const sfRef = doc(db, "cities", "SF");
-    batch.update(sfRef, { population: 1000000 });
+      // Replace the bellow placeholder code with the correct code
 
-    // Commit the batch
-    await batch.commit();
+      // Update docs
+      batch.update(followerUserRef, {
+        following,
+      });
+      batch.update(followedUserRef, {
+        followers,
+      });
+
+      // Commit the batch
+      await batch.commit();
+    } catch (error) {
+      console.log(error.message);
+    }
   } catch (error) {
     console.log(error.message);
   }
