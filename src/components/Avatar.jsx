@@ -57,11 +57,6 @@ const Avatar = ({
     return <Loading />;
   }
 
-  const handleClose = () => {
-    console.log("close");
-    close();
-  };
-
   return (
     <div className={`avatar avatar-${avatarSize}`}>
       {user.avatar && <img src={user.avatar} alt={user.username} />}
@@ -71,7 +66,7 @@ const Avatar = ({
             <NavLink
               to={`/profile/${user.username}`}
               className="avatar-username"
-              onClick={handleClose}
+              onClick={close}
             >
               {user.username}
             </NavLink>

@@ -7,6 +7,7 @@ import { HeartIcon as HeartOutlineIcon } from "@heroicons/react/24/outline";
 import { useAuthContext } from "../../context/AuthProvider";
 import Popup from "reactjs-popup";
 import UsersList from "../UsersList";
+import { Link } from "react-router-dom";
 
 const Comment = ({ comment }) => {
   const { user, isLoading } = useUser(comment.uid);
@@ -36,7 +37,10 @@ const Comment = ({ comment }) => {
       <div className="post-comment-header">
         <div className="post-comment-content">
           <span className="post-comment-author">
-            <strong>{user?.username}</strong>:
+            <Link to={`/profile/${user?.username}`} className="avatar-username">
+              <strong>{user?.username}</strong>
+            </Link>
+            :
           </span>
           <span className="post-comment-text">{comment.comment}</span>
         </div>
