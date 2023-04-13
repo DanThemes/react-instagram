@@ -74,6 +74,12 @@ button {
     margin-left: 0.5rem;
   }
 
+  &.small {
+    margin: 0 0 0 1rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
   &:hover {
     cursor: pointer;
     background-color: #b64747;
@@ -438,6 +444,7 @@ button {
 .avatar {
   display: flex;
   align-items: center;
+  flex: 1;
 
   img {
     border-radius: 50%;
@@ -474,6 +481,7 @@ button {
     display: flex;
     align-items: flex-start;
     flex-direction: column;
+    flex: 1;
 
     .avatar-username {
       font-weight: bold;
@@ -578,6 +586,10 @@ button {
       .search-results-item-username {
         color: #61896d;
       }
+    }
+
+    .search-results-item-avatar {
+      flex: 1;
     }
   }
 }

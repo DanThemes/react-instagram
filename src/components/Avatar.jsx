@@ -14,6 +14,7 @@ const Avatar = ({
   size = "medium",
   showUsername = true,
   stats = true,
+  statsLink = true,
   button = true,
 }) => {
   const { auth } = useAuthContext();
@@ -65,7 +66,7 @@ const Avatar = ({
           <NavLink to={`/profile/${user.username}`} className="avatar-username">
             {user.username}
           </NavLink>
-          {stats && <AvatarStats user={user} />}
+          {stats && <AvatarStats user={user} statsLink={statsLink} />}
         </div>
       )}
       {button && (

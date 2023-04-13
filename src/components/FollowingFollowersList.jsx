@@ -20,7 +20,7 @@ const FollowingFollowersList = ({ currentUser, list }) => {
     <div className="users-list">
       {users.map((user) => (
         <div key={user.uid} className="users-list-item">
-          <Avatar uid={user.uid} />
+          <Avatar uid={user.uid} statsLink={false} />
         </div>
       ))}
     </div>

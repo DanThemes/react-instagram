@@ -25,13 +25,16 @@ const FollowUnfollowButton = ({
         (isFollowing ? (
           <button
             onClick={() => handleUnfollowUser(currentUser, otherUser)}
-            className="following"
+            className="following small"
           >
             Unfollow
             {isLoadingFollowing && <ArrowPathIcon />}
           </button>
         ) : (
-          <button onClick={() => handleFollowUser(currentUser, otherUser)}>
+          <button
+            onClick={() => handleFollowUser(currentUser, otherUser)}
+            className="small"
+          >
             Follow
             {isLoadingFollowing && <ArrowPathIcon />}
           </button>
