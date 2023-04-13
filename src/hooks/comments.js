@@ -50,6 +50,8 @@ export const useComments = (pid = null, cid = null) => {
 
     // doesn't work well
     // allow only 1 nested level of comments
+    // or allow the default 3 levels Firebase offers?
+    // possible solution https://firebase.google.com/docs/firestore/query-data/queries#collection-group-query
     if (pid) {
       q = query(
         collection(db, "comments"),
