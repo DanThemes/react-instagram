@@ -10,6 +10,7 @@ import {
   getDoc,
   runTransaction,
   writeBatch,
+  onSnapshot,
 } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { useEffect, useState } from "react";
@@ -39,12 +40,15 @@ export const useUser = (idOrUsername) => {
         );
         // !!!!!!!!!!!!!!!!
         // set up a onSnapshot listener here instead
-        const docSnapshot = await getDocs(docRef);
-        if (docSnapshot.docs.length === 1) {
+        onSnapshot(docRef, (docSnapshot) => {
           setUser(docSnapshot.docs[0].data());
-        } else {
-          setError("User not found");
-        }
+        });
+        // const docSnapshot = await getDocs(docRef);
+        // if (docSnapshot.docs.length === 1) {
+        //   setUser(docSnapshot.docs[0].data());
+        // } else {
+        //   setError("User not found");
+        // }
       } catch (error) {
         setError(error.message);
       } finally {
@@ -130,12 +134,14 @@ export const useSearchUsers = (keyword) => {
             )
           )
         );
-        const querySnapshot = await getDocs(q);
-        const resultData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setUsers(resultData);
+        // const querySnapshot = await getDocs(q);
+        onSnapshot(q, (querySnapshot) => {
+          const resultData = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setUsers(resultData);
+        });
       } catch (error) {
         console.log(error.message);
       } finally {

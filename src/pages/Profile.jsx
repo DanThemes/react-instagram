@@ -21,7 +21,7 @@ const Profile = () => {
   return (
     <div className="profile">
       <div className="profile-header">
-        <Avatar user={user} followers={true} following={true} />
+        <Avatar uid={user.uid} followers={true} following={true} />
       </div>
       <div className="profile-content">
         <Posts uid={user.uid} />

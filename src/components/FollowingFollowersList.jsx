@@ -20,18 +20,7 @@ const FollowingFollowersList = ({ currentUser, list }) => {
     <div className="users-list">
       {users.map((user) => (
         <div key={user.uid} className="users-list-item">
-          <Avatar user={user} />
-          <div className="users-list-follow-unfollow">
-            <FollowUnfollowButton
-              currentUser={currentUser}
-              otherUser={user}
-              handleFollowUser={handleFollowUser}
-              handleUnfollowUser={handleUnfollowUser}
-              isLoadingFollowing={isLoadingFollowing}
-              isFollowing={isFollowing}
-              setIsFollowing={setIsFollowing}
-            />
-          </div>
+          <Avatar uid={user.uid} />
         </div>
       ))}
     </div>

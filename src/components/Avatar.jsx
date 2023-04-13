@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import Popup from "reactjs-popup";
 import FollowingFollowersList from "./FollowingFollowersList";
@@ -6,19 +6,25 @@ import FollowUnfollowButton from "./FollowUnfollowButton";
 import { useAuthContext } from "../context/AuthProvider";
 import AvatarStats from "./AvatarStats";
 import { useState } from "react";
-import { useFollowUser, useUnfollowUser } from "../hooks/users";
+import { useFollowUser, useUnfollowUser, useUser } from "../hooks/users";
+import Loading from "./Loading";
 
 const Avatar = ({
-  user,
+  uid,
   size = "medium",
   showUsername = true,
   stats = true,
   button = true,
 }) => {
   const { auth } = useAuthContext();
+  const { user } = useUser(uid);
 
   const [isFollowing, setIsFollowing] = useState(null);
   const [isLoadingFollowing, setIsLoadingFollowing] = useState(false);
+
+  // useEffect(() => {
+
+  // }, [user]);
 
   const handleFollowUser = async (cUser, oUser) => {
     try {
@@ -43,6 +49,10 @@ const Avatar = ({
       setIsLoadingFollowing(false);
     }
   };
+
+  if (!auth || !user) {
+    return <Loading />;
+  }
 
   // !!!!!!!!!!!!
   // set a onSnapshot listener to make sure you always have the latest data of the "user" prop, maybe use the uid instead...

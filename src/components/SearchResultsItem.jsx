@@ -4,14 +4,11 @@ import { Link } from "react-router-dom";
 
 const SearchResultsItem = ({ user }) => {
   return (
-    <Link to={`/profile/${user.username}`}>
-      <div className="search-results-item">
-        <div className="search-results-item-avatar">
-          <Avatar user={user} size="small" showUsername={false} />
-        </div>
-        <div className="search-results-item-username">{user.username}</div>
+    <div className="search-results-item">
+      <div className="search-results-item-avatar">
+        <Avatar uid={user.uid} size="small" />
       </div>
-    </Link>
+    </div>
   );
 };
 

@@ -14,7 +14,7 @@ const FollowUnfollowButton = ({
   useEffect(() => {
     if (!currentUser || !otherUser) return;
 
-    // setIsFollowing(currentUser.following.includes(otherUser.uid));
+    setIsFollowing(currentUser.following.includes(otherUser.uid));
   }, [currentUser, otherUser]);
 
   const isMe = currentUser.uid === otherUser.uid;
