@@ -1,7 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
-import Popup from "reactjs-popup";
-import FollowingFollowersList from "./UsersList";
 import FollowUnfollowButton from "./FollowUnfollowButton";
 import { useAuthContext } from "../context/AuthProvider";
 import AvatarStats from "./AvatarStats";

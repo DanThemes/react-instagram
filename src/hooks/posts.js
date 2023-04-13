@@ -19,18 +19,35 @@ import {
   ref,
   uploadBytes,
 } from "firebase/storage";
+import { useAuthContext } from "../context/AuthProvider";
 
-export const usePosts = (uid = null) => {
-  const [posts, setPosts] = useState(null);
+export const usePosts = (showOnlyPostsOfUsersFollowed) => {
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { auth } = useAuthContext();
+
+  if (!auth) {
+    return { posts, isLoading: false };
+  }
+
+  const usersFollowed = [...auth.user.following, auth.user.uid];
+
+  // if (showOnlyPostsOfUsersFollowed == true) {
+  //   return { posts, isLoading: false };
+  // }
 
   useEffect(() => {
     let q;
-    if (uid) {
-      q = query(
-        collection(db, "posts"),
-        where("uid", "==", uid),
-        orderBy("createdAt", "desc")
-      );
+    if (auth.user.uid) {
+      if (showOnlyPostsOfUsersFollowed) {
+        q = query(collection(db, "posts"), where("uid", "in", usersFollowed));
+      } else {
+        q = query(
+          collection(db, "posts"),
+          where("uid", "==", auth.user.uid),
+          orderBy("createdAt", "desc")
+        );
+      }
     } else {
       q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
     }
@@ -39,13 +56,21 @@ export const usePosts = (uid = null) => {
         id: doc.id,
         ...doc.data(),
       }));
-      setPosts(postsArray);
+
+      // Order posts based on the 'createdAt' field
+      // Firebase doesn't allow to use the 'orderBy' function
+      // in the 'showOnlyPostsOfUsersFollowed' query
+      const orderedPostsArray = postsArray.sort(
+        (a, b) => b.createdAt - a.createdAt
+      );
+      setPosts(orderedPostsArray);
+      setIsLoading(false);
     });
 
     return unsubscribe;
-  }, [uid]);
+  }, [auth, showOnlyPostsOfUsersFollowed]);
 
-  return posts;
+  return { posts, isLoading };
 };
 
 export const useNewPost = async (data, user) => {

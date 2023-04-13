@@ -69,28 +69,20 @@ export const useUsers = (uids) => {
 
   useEffect(() => {
     if (!uids) return;
+    setIsLoading(true);
 
-    // Get user data from "users" collection
-    const getUsers = async () => {
-      try {
-        const q = query(collection(db, "users"), where("uid", "in", uids));
+    const q = query(collection(db, "users"), where("uid", "in", uids));
 
-        onSnapshot(q, (querySnapshot) => {
-          const usersList = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setUsers(usersList);
-        });
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const usersList = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setUsers(usersList);
+      setIsLoading(false);
+    });
 
-        // console.log({ usersList });
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getUsers();
+    return unsubscribe;
   }, [uids]);
 
   return { users, isLoading, error };
@@ -101,55 +93,51 @@ export const useSearchUsers = (keyword) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const searchUsers = async () => {
-      setIsLoading(true);
+    if (!keyword) {
+      setIsLoading(false);
+      return;
+    }
+    setIsLoading(true);
 
-      try {
-        if (!keyword) return;
-
-        const q = query(
-          collection(db, "users"),
-          or(
-            // query as-is:
-            and(
-              where("username", ">=", keyword),
-              where("username", "<=", keyword + "\uf8ff")
-            ),
-            // capitalize first letter:
-            and(
-              where(
-                "username",
-                ">=",
-                keyword.charAt(0).toUpperCase() + keyword.slice(1)
-              ),
-              where(
-                "username",
-                "<=",
-                keyword.charAt(0).toUpperCase() + keyword.slice(1) + "\uf8ff"
-              )
-            ),
-            // lowercase:
-            and(
-              where("username", ">=", keyword.toLowerCase()),
-              where("username", "<=", keyword.toLowerCase() + "\uf8ff")
-            )
+    const q = query(
+      collection(db, "users"),
+      or(
+        // query as-is:
+        and(
+          where("username", ">=", keyword),
+          where("username", "<=", keyword + "\uf8ff")
+        ),
+        // capitalize first letter:
+        and(
+          where(
+            "username",
+            ">=",
+            keyword.charAt(0).toUpperCase() + keyword.slice(1)
+          ),
+          where(
+            "username",
+            "<=",
+            keyword.charAt(0).toUpperCase() + keyword.slice(1) + "\uf8ff"
           )
-        );
-        // const querySnapshot = await getDocs(q);
-        onSnapshot(q, (querySnapshot) => {
-          const resultData = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setUsers(resultData);
-        });
-      } catch (error) {
-        console.log(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    searchUsers();
+        ),
+        // lowercase:
+        and(
+          where("username", ">=", keyword.toLowerCase()),
+          where("username", "<=", keyword.toLowerCase() + "\uf8ff")
+        )
+      )
+    );
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const resultData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setUsers(resultData);
+      setIsLoading(false);
+    });
+
+    return unsubscribe;
   }, [keyword]);
 
   return { users, isLoading };

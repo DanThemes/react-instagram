@@ -2,16 +2,17 @@ import React from "react";
 import { usePosts } from "../hooks/posts";
 import ListPost from "./ListPost";
 import GridPost from "./GridPost";
+import Loading from "./Loading";
 
-const Posts = ({ uid = null }) => {
-  const posts = usePosts(uid);
+const Posts = ({ style = "list", showOnlyPostsOfUsersFollowed }) => {
+  const { posts, isLoading } = usePosts(showOnlyPostsOfUsersFollowed);
 
-  if (!posts) {
-    return "Loading";
+  if (isLoading) {
+    return <Loading />;
   }
 
   // Grid Posts
-  if (uid) {
+  if (style === "grid") {
     return (
       <div className="grid-posts">
         {posts.map((post) => (

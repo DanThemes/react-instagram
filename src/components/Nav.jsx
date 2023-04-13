@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuthContext } from "../context/AuthProvider";
+import Loading from "./Loading";
 
 const Nav = () => {
   const {
@@ -9,11 +10,11 @@ const Nav = () => {
   } = useAuthContext();
 
   if (isLoading) {
-    return "Loading";
+    return <Loading />;
   }
 
   if (error) {
-    return error;
+    return error.message;
   }
 
   return (

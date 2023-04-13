@@ -29,7 +29,7 @@ const Profile = () => {
         />
       </div>
       <div className="profile-content">
-        <Posts uid={user.uid} />
+        <Posts style="grid" uid={user.uid} />
       </div>
     </div>
   );

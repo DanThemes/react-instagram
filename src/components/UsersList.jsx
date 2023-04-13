@@ -1,9 +1,7 @@
 import React from "react";
-import { useFollowUser, useUnfollowUser, useUsers } from "../hooks/users";
+import { useUsers } from "../hooks/users";
 import Loading from "./Loading";
 import Avatar from "./Avatar";
-import FollowUnfollowButton from "./FollowUnfollowButton";
-import { useState } from "react";
 
 const UsersList = ({ list, close }) => {
   const { users } = useUsers(list);
