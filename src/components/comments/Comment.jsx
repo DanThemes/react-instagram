@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useUser } from "../../hooks/users";
 import { formatDistance } from "date-fns";
 import { useDeleteComment, useToggleLikeComment } from "../../hooks/comments";
@@ -8,8 +8,10 @@ import { useAuthContext } from "../../context/AuthProvider";
 import Popup from "reactjs-popup";
 import UsersList from "../UsersList";
 import { Link } from "react-router-dom";
+import NewComment from "./NewComment";
 
 const Comment = ({ comment }) => {
+  const [showNewReply, setShowNewReply] = useState(false);
   const { user, isLoading } = useUser(comment.uid);
   const {
     auth,
@@ -73,7 +75,12 @@ const Comment = ({ comment }) => {
             `${commentNumber} ${commentNumber === 1 ? "like" : "likes"}`
           )}
         </span>
-        <span className="link post-comment-footer-reply">Reply</span>
+        <span
+          className="link post-comment-footer-reply"
+          onClick={() => setShowNewReply((prev) => !prev)}
+        >
+          Reply
+        </span>
         {isAuthor && (
           <span
             className="link post-comment-footer-delete"
@@ -83,7 +90,11 @@ const Comment = ({ comment }) => {
           </span>
         )}
       </div>
+      {console.log({ showNewReply })}
       <div className="post-comment-replies">Replies</div>
+      <div className="post-comment-new-reply">
+        {showNewReply && <NewComment uid={auth.user.uid} cid={comment.id} />}
+      </div>
     </div>
   );
 };

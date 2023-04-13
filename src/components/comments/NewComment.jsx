@@ -12,7 +12,7 @@ const newCommentSchema = yup.object().shape({
   comment: yup.string().required("Required"),
 });
 
-const NewComment = ({ uid, pid }) => {
+const NewComment = ({ uid, pid = null, cid = null }) => {
   const {
     register,
     handleSubmit,
@@ -36,7 +36,15 @@ const NewComment = ({ uid, pid }) => {
   }
 
   const handleNewComment = async () => {
-    const data = { ...getValues(), uid, pid };
+    const data = { ...getValues() };
+
+    if (pid) {
+      data.pid = pid;
+    }
+    if (cid) {
+      data.cid = cid;
+    }
+
     await useNewComment(data);
     reset();
   };

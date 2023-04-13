@@ -15,8 +15,20 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 
 export const useNewComment = async (data) => {
+  let ref;
+
+  // if it's a reply
+  if ("pid" in data) {
+    docRef = doc(db, "comments", cid);
+    ref = collection(docRef, "replies");
+  }
+  // if it's a comment
+  else {
+    ref = collection(db, "comments");
+  }
+
   try {
-    await addDoc(collection(db, "comments"), {
+    await addDoc(ref, {
       ...data,
       likes: [],
       createdAt: Date.now(),
