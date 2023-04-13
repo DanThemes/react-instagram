@@ -18,8 +18,8 @@ export const useNewComment = async (data) => {
   let ref;
 
   // if it's a reply
-  if ("pid" in data) {
-    docRef = doc(db, "comments", cid);
+  if ("cid" in data) {
+    const docRef = doc(db, "comments", data.cid);
     ref = collection(docRef, "replies");
   }
   // if it's a comment
@@ -40,23 +40,33 @@ export const useNewComment = async (data) => {
   }
 };
 
-export const useComments = (pid) => {
+export const useComments = (pid = null, cid = null) => {
   const [isLoading, setIsLoading] = useState(true);
   const [comments, setComments] = useState(null);
 
   useEffect(() => {
     setIsLoading(true);
-    const q = query(
-      collection(db, "comments"),
-      where("pid", "==", pid),
-      orderBy("createdAt", "asc")
-    );
+    let q;
+
+    // doesn't work well
+    // allow only 1 nested level of comments
+    if (pid) {
+      q = query(
+        collection(db, "comments"),
+        where("pid", "==", pid),
+        orderBy("createdAt", "asc")
+      );
+    } else if (cid) {
+      const commentRef = doc(db, "comments", cid);
+      q = query(collection(commentRef, "replies"), orderBy("createdAt", "asc"));
+    }
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const commentsArray = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
+      console.log({ commentsArray, pid, cid });
       setComments(commentsArray);
       setIsLoading(false);
     });

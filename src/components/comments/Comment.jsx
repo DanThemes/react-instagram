@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { useUser } from "../../hooks/users";
 import { formatDistance } from "date-fns";
-import { useDeleteComment, useToggleLikeComment } from "../../hooks/comments";
+import {
+  useComments,
+  useDeleteComment,
+  useToggleLikeComment,
+} from "../../hooks/comments";
 import { HeartIcon } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartOutlineIcon } from "@heroicons/react/24/outline";
 import { useAuthContext } from "../../context/AuthProvider";
@@ -19,7 +23,14 @@ const Comment = ({ comment }) => {
   } = useAuthContext();
   const isAuthor = comment.uid === auth?.user?.uid;
 
-  if (isLoading || isAuthLoading) {
+  const { comments, isLoading: areCommentsLoading } = useComments(
+    null,
+    comment.id
+  );
+
+  const isReply = !!comment.cid;
+
+  if (isLoading || isAuthLoading || areCommentsLoading) {
     return;
   }
 
@@ -90,8 +101,13 @@ const Comment = ({ comment }) => {
           </span>
         )}
       </div>
-      {console.log({ showNewReply })}
-      <div className="post-comment-replies">Replies</div>
+
+      <div className="post-comment-replies">
+        {comments.map((comment) => (
+          <Comment key={comment.id} comment={comment} />
+        ))}
+      </div>
+
       <div className="post-comment-new-reply">
         {showNewReply && <NewComment uid={auth.user.uid} cid={comment.id} />}
       </div>

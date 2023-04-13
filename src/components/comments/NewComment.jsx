@@ -36,7 +36,7 @@ const NewComment = ({ uid, pid = null, cid = null }) => {
   }
 
   const handleNewComment = async () => {
-    const data = { ...getValues() };
+    const data = { ...getValues(), uid };
 
     if (pid) {
       data.pid = pid;

@@ -326,7 +326,7 @@ button {
       .post-comment {
         display: grid;
         grid-template-columns: 1fr;
-        grid-gap: 0.25rem;
+        // grid-gap: 0.25rem;
 
         & ~ .post-comment {
           border-top: 1px solid #eee;
@@ -403,6 +403,11 @@ button {
         }
 
         .post-comment-replies {
+          padding-left: 3rem;
+
+          .post-comment {
+            margin-top: 1rem;
+          }
         }
       }
     }
