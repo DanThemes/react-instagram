@@ -45,7 +45,11 @@ const Comment = ({ comment }) => {
           <span className="post-comment-text">{comment.comment}</span>
         </div>
         <div className="post-comment-like" onClick={handleToggleLikeComment}>
-          {isLiked ? <HeartIcon /> : <HeartOutlineIcon />}
+          {isLiked ? (
+            <HeartIcon className="liked" />
+          ) : (
+            <HeartOutlineIcon className="not-liked" />
+          )}
         </div>
       </div>
       <div className="post-comment-footer">
@@ -69,16 +73,17 @@ const Comment = ({ comment }) => {
             `${commentNumber} ${commentNumber === 1 ? "like" : "likes"}`
           )}
         </span>
-        <span className="post-comment-footer-reply">Reply</span>
+        <span className="link post-comment-footer-reply">Reply</span>
         {isAuthor && (
           <span
-            className="post-comment-footer-delete"
+            className="link post-comment-footer-delete"
             onClick={handleDeleteComment}
           >
             Delete
           </span>
         )}
       </div>
+      <div className="post-comment-replies">Replies</div>
     </div>
   );
 };

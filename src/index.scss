@@ -49,6 +49,14 @@ a {
   text-decoration: none;
   transition: all 0.3s ease-in-out;
 }
+a:hover,
+.link:hover {
+  color: #ce5b5b;
+}
+.link {
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
 
 img {
   max-width: 100%;
@@ -58,10 +66,6 @@ img {
 
 svg {
   vertical-align: middle;
-}
-
-.link {
-  cursor: pointer;
 }
 
 button {
@@ -350,8 +354,6 @@ button {
 
           .post-comment-like {
             cursor: pointer;
-            // flex: 1rem;
-            // flex-grow: 0;
             display: flex;
             align-items: center;
             justify-content: flex-end;
@@ -359,6 +361,19 @@ button {
             svg {
               width: 1rem;
               height: auto;
+              transition: 0.3s ease all;
+
+              &.liked {
+                color: #ce5b5b;
+              }
+
+              &.not-liked {
+                color: #ccc;
+              }
+
+              &:hover {
+                color: #ce5b5b;
+              }
             }
           }
         }
@@ -377,10 +392,8 @@ button {
           .post-comment-footer-likes {
           }
           .post-comment-footer-reply {
-            cursor: pointer;
           }
           .post-comment-footer-delete {
-            cursor: pointer;
             color: #ce5b5b;
           }
         }
