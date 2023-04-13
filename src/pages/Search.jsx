@@ -22,7 +22,7 @@ const Search = () => {
 
   const handleSearch = (data) => {
     setSeachTerm(data.keyword);
-    reset();
+    // reset();
   };
 
   return (

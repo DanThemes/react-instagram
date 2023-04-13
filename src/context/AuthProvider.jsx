@@ -17,6 +17,7 @@ import {
   addDoc,
   collection,
   getDocs,
+  onSnapshot,
   query,
   updateDoc,
   where,
@@ -78,15 +79,22 @@ export const AuthProvider = ({ children }) => {
       }
 
       const q = query(collection(db, "users"), where("uid", "==", user.uid));
-      const usersRef = await getDocs(q);
-      const userRef = usersRef.docs[0].data();
+      onSnapshot(q, (docSnapshot) => {
+        if (!docSnapshot) return;
+        const userData = docSnapshot.docs[0].data();
 
-      if (userRef) {
-        const userData = usersRef.docs[0].data();
         dispatch({ type: "SET_USER", payload: userData });
         dispatch({ type: "SET_LOADING", payload: false });
-        // navigate("/");
-      }
+      });
+      // const usersRef = await getDocs(q);
+      // const userRef = usersRef.docs[0].data();
+
+      // if (userRef) {
+      //   const userData = usersRef.docs[0].data();
+      //   dispatch({ type: "SET_USER", payload: userData });
+      //   dispatch({ type: "SET_LOADING", payload: false });
+      //   // navigate("/");
+      // }
     });
 
     return unsubscribe;

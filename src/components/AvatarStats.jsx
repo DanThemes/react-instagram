@@ -29,7 +29,7 @@ const AvatarStats = ({ user }) => {
           <FollowingFollowersList currentUser={user} list={user.following} />
         </Popup>
       ) : (
-        <span className="not-empty">{user.following.length} following</span>
+        <span>{user.following.length} following</span>
       )}
     </p>
   );
