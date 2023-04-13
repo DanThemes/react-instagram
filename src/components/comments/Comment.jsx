@@ -5,6 +5,8 @@ import { useDeleteComment, useToggleLikeComment } from "../../hooks/comments";
 import { HeartIcon } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartOutlineIcon } from "@heroicons/react/24/outline";
 import { useAuthContext } from "../../context/AuthProvider";
+import Popup from "reactjs-popup";
+import UsersList from "../UsersList";
 
 const Comment = ({ comment }) => {
   const { user, isLoading } = useUser(comment.uid);
@@ -47,7 +49,21 @@ const Comment = ({ comment }) => {
           {formatDistance(comment.createdAt, Date.now())}
         </span>
         <span className="post-comment-footer-likes">
-          {commentNumber} {commentNumber === 1 ? "like" : "likes"}
+          {commentNumber ? (
+            <Popup
+              trigger={
+                <p className="link">
+                  {commentNumber} {commentNumber === 1 ? "like" : "likes"}
+                </p>
+              }
+              position="right center"
+              modal
+            >
+              {(close) => <UsersList list={comment.likes} close={close} />}
+            </Popup>
+          ) : (
+            `${commentNumber} ${commentNumber === 1 ? "like" : "likes"}`
+          )}
         </span>
         <span className="post-comment-footer-reply">Reply</span>
         {isAuthor && (

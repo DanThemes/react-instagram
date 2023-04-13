@@ -60,6 +60,10 @@ svg {
   vertical-align: middle;
 }
 
+.link {
+  cursor: pointer;
+}
+
 button {
   margin-top: 1rem;
   background-color: #ce5b5b;
@@ -294,7 +298,16 @@ button {
     }
 
     .post-new-comment {
+      .avatar {
+        flex-grow: 0;
+        flex-basis: 2rem;
+
+        img {
+          margin-right: 0;
+        }
+      }
       textarea {
+        margin-left: 0.5rem;
       }
     }
 
@@ -493,10 +506,6 @@ button {
     font-size: 0.75rem;
 
     span {
-      &.not-empty {
-        cursor: pointer;
-      }
-
       + span {
         margin-left: 0.5rem;
 
@@ -619,9 +628,21 @@ button {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0.5rem 0;
+
+    & + .users-list-item {
+      border-top: 1px solid #eee;
+    }
 
     button {
       margin: 0;
     }
   }
+}
+
+.popup-content {
+  padding: 1rem;
+  border: 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
 }

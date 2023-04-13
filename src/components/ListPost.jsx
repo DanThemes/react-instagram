@@ -15,6 +15,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { useRef } from "react";
+import Loading from "./Loading";
 
 const Post = ({ post }) => {
   const [toggleMenu, setToggleMenu] = useState(false);
@@ -74,8 +75,8 @@ const Post = ({ post }) => {
     }
   };
 
-  if (isLoading) {
-    return "Loading";
+  if (!user) {
+    return <Loading />;
   }
 
   if (error) {
@@ -86,21 +87,16 @@ const Post = ({ post }) => {
     <div className="post">
       <div className="post-header">
         <div className="post-header-left">
-          <Avatar user={user} size="small" />
+          <Avatar
+            uid={user.uid}
+            avatarSize="small"
+            stats={false}
+            button={false}
+          />
         </div>
         <div className="post-header-right">
           {isAuthor && (
-            <div
-              className="post-menu"
-              ref={postMenu}
-              // doesn't work well
-              // instead call a different function
-              // which handles the toggling,
-              // now every click inside this element will
-              // set the menu to true, so it will not close
-              // on child element click
-              // onClick={e => handleOpenMenu(e)}
-            >
+            <div className="post-menu" ref={postMenu}>
               <EllipsisHorizontalIcon
                 onClick={() => setToggleMenu((prev) => !prev)}
               />

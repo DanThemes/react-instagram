@@ -49,7 +49,7 @@ const NewComment = ({ uid, pid }) => {
 
   return (
     <div className="post-new-comment">
-      <Avatar user={user} size="small" showUsername={false} />
+      <Avatar uid={user.uid} avatarSize="small" showUsername={false} />
       <form onSubmit={handleSubmit(handleNewComment)} className="comment-form">
         <TextareaAutosize
           maxRows="5"

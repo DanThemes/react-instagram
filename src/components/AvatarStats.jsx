@@ -1,5 +1,5 @@
 import React from "react";
-import FollowingFollowersList from "./FollowingFollowersList";
+import UsersList from "./UsersList";
 import Popup from "reactjs-popup";
 
 const AvatarStats = ({ user, statsLink }) => {
@@ -8,12 +8,12 @@ const AvatarStats = ({ user, statsLink }) => {
       {user.followers.length && statsLink ? (
         <Popup
           trigger={
-            <span className="not-empty">{user.followers.length} followers</span>
+            <span className="link">{user.followers.length} followers</span>
           }
           position="right center"
           modal
         >
-          <FollowingFollowersList currentUser={user} list={user.followers} />
+          {(close) => <UsersList list={user.followers} close={close} />}
         </Popup>
       ) : (
         <span>{user.followers.length} followers</span>
@@ -21,12 +21,12 @@ const AvatarStats = ({ user, statsLink }) => {
       {user.following.length && statsLink ? (
         <Popup
           trigger={
-            <span className="not-empty">{user.following.length} following</span>
+            <span className="link">{user.following.length} following</span>
           }
           position="right center"
           modal
         >
-          <FollowingFollowersList currentUser={user} list={user.following} />
+          {(close) => <UsersList list={user.following} close={close} />}
         </Popup>
       ) : (
         <span>{user.following.length} following</span>

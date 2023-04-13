@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import Popup from "reactjs-popup";
-import FollowingFollowersList from "./FollowingFollowersList";
+import FollowingFollowersList from "./UsersList";
 import FollowUnfollowButton from "./FollowUnfollowButton";
 import { useAuthContext } from "../context/AuthProvider";
 import AvatarStats from "./AvatarStats";
@@ -11,11 +11,13 @@ import Loading from "./Loading";
 
 const Avatar = ({
   uid,
-  size = "medium",
+  avatarSize = "medium",
+  avatarLink = true,
   showUsername = true,
   stats = true,
   statsLink = true,
   button = true,
+  close,
 }) => {
   const { auth } = useAuthContext();
   const { user } = useUser(uid);
@@ -55,17 +57,27 @@ const Avatar = ({
     return <Loading />;
   }
 
-  // !!!!!!!!!!!!
-  // set a onSnapshot listener to make sure you always have the latest data of the "user" prop, maybe use the uid instead...
+  const handleClose = () => {
+    console.log("close");
+    close();
+  };
 
   return (
-    <div className={`avatar avatar-${size}`}>
+    <div className={`avatar avatar-${avatarSize}`}>
       {user.avatar && <img src={user.avatar} alt={user.username} />}
       {showUsername && (
         <div className="avatar-right">
-          <NavLink to={`/profile/${user.username}`} className="avatar-username">
-            {user.username}
-          </NavLink>
+          {avatarLink ? (
+            <NavLink
+              to={`/profile/${user.username}`}
+              className="avatar-username"
+              onClick={handleClose}
+            >
+              {user.username}
+            </NavLink>
+          ) : (
+            <span className="avatar-username">{user.username}</span>
+          )}
           {stats && <AvatarStats user={user} statsLink={statsLink} />}
         </div>
       )}

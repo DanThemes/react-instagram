@@ -73,16 +73,17 @@ export const useUsers = (uids) => {
     // Get user data from "users" collection
     const getUsers = async () => {
       try {
-        const docRef = query(collection(db, "users"), where("uid", "in", uids));
-        const docSnapshot = await getDocs(docRef);
+        const q = query(collection(db, "users"), where("uid", "in", uids));
 
-        const usersList = docSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        console.log({ usersList });
+        onSnapshot(q, (querySnapshot) => {
+          const usersList = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setUsers(usersList);
+        });
 
-        setUsers(usersList);
+        // console.log({ usersList });
       } catch (error) {
         setError(error.message);
       } finally {
