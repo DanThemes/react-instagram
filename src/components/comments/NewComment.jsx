@@ -12,7 +12,7 @@ const newCommentSchema = yup.object().shape({
   comment: yup.string().required("Required"),
 });
 
-const NewComment = ({ uid, pid = null, cid = null }) => {
+const NewComment = ({ uid, parentComment }) => {
   const {
     register,
     handleSubmit,
@@ -37,13 +37,14 @@ const NewComment = ({ uid, pid = null, cid = null }) => {
 
   const handleNewComment = async () => {
     const data = { ...getValues(), uid };
-
-    if (pid) {
-      data.pid = pid;
+    if (
+      typeof parentComment === "object" &&
+      parentComment !== null &&
+      "id" in parentComment
+    ) {
+      data.parentId = parentComment.id;
     }
-    if (cid) {
-      data.cid = cid;
-    }
+    console.log(data);
 
     await useNewComment(data);
     reset();

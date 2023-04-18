@@ -1,9 +1,12 @@
 import {
   addDoc,
   collection,
+  collectionGroup,
   deleteDoc,
   doc,
+  documentId,
   getDoc,
+  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -16,10 +19,13 @@ import { useEffect, useState } from "react";
 
 export const useNewComment = async (data) => {
   let ref;
+  console.log(data);
+  return;
 
-  // if it's a reply
+  // if it's a reply to a comment
   if ("cid" in data) {
-    const docRef = doc(db, "comments", data.cid);
+    // const docRef = doc(db, "comments", data.pid);
+    const docRef = doc(db, `comments/${data.pid}`);
     ref = collection(docRef, "replies");
   }
   // if it's a comment
@@ -68,7 +74,6 @@ export const useComments = (pid = null, cid = null) => {
         id: doc.id,
         ...doc.data(),
       }));
-      console.log({ commentsArray, pid, cid });
       setComments(commentsArray);
       setIsLoading(false);
     });
@@ -99,11 +104,31 @@ export const useDeleteComment = async (uid, id) => {
   }
 };
 
-export const useToggleLikeComment = async (uid, cid) => {
+export const useToggleLikeComment = async (uid, comment) => {
   try {
-    const commentRef = doc(db, "comments", cid);
-    const comment = await getDoc(commentRef);
-    let likes = comment.data().likes;
+    let q;
+
+    // if it's a reply to a comment
+    if ("cid" in comment) {
+      q = query(
+        collection(db, `comments/${comment.cid}/replies`),
+        where(documentId(), "==", comment.id)
+      );
+    }
+    // if it's a comment
+    else {
+      q = query(
+        collection(db, "comments"),
+        where(documentId(), "==", comment.id)
+      );
+    }
+    const comments = await getDocs(q);
+    const commentsData = comments.docs.map((c) => ({ ...c.data(), id: c.id }));
+    console.log(commentsData, comment);
+    const c = comments.docs[0];
+
+    const commentRef = c.ref;
+    let likes = c.data().likes;
 
     if (likes.includes(uid)) {
       // If the comment is liked, remove the like

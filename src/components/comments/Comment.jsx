@@ -42,7 +42,7 @@ const Comment = ({ comment }) => {
   };
 
   const handleToggleLikeComment = async () => {
-    await useToggleLikeComment(auth.user.uid, comment.id);
+    await useToggleLikeComment(auth.user.uid, comment);
   };
 
   return (
@@ -51,7 +51,7 @@ const Comment = ({ comment }) => {
         <div className="post-comment-content">
           <span className="post-comment-author">
             <Link to={`/profile/${user?.username}`} className="avatar-username">
-              <strong>{user?.username}</strong>
+              <strong>{user?.username}</strong> {comment.id}
             </Link>
             :
           </span>
@@ -67,7 +67,7 @@ const Comment = ({ comment }) => {
       </div>
       <div className="post-comment-footer">
         <span className="post-comment-footer-date">
-          {formatDistance(comment.createdAt, Date.now())}
+          {formatDistance(comment.createdAt, Date.now())} ago
         </span>
         <span className="post-comment-footer-likes">
           {commentNumber ? (
@@ -109,7 +109,9 @@ const Comment = ({ comment }) => {
       </div>
 
       <div className="post-comment-new-reply">
-        {showNewReply && <NewComment uid={auth.user.uid} cid={comment.id} />}
+        {showNewReply && (
+          <NewComment uid={auth.user.uid} parentComment={comment} />
+        )}
       </div>
     </div>
   );
