@@ -8,46 +8,51 @@ import ProtectedPage from "./components/ProtectedPage";
 import ProfileUpdate from "./pages/ProfileUpdate";
 import Search from "./pages/Search";
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          index: true,
+          element: (
+            <ProtectedPage>
+              <Home />
+            </ProtectedPage>
+          ),
+        },
+        {
+          path: "/register",
+          element: <Register />,
+        },
+        {
+          path: "/login",
+          element: <Login />,
+        },
+        {
+          path: "/profile/:username",
+          element: <Profile />,
+        },
+        {
+          path: "/update-profile",
+          element: (
+            <ProtectedPage>
+              <ProfileUpdate />
+            </ProtectedPage>
+          ),
+        },
+        {
+          path: "/search",
+          element: <Search />,
+        },
+      ],
+    },
+  ],
   {
-    path: "/",
-    element: <Layout />,
-    children: [
-      {
-        index: true,
-        element: (
-          <ProtectedPage>
-            <Home />
-          </ProtectedPage>
-        ),
-      },
-      {
-        path: "/register",
-        element: <Register />,
-      },
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/profile/:username",
-        element: <Profile />,
-      },
-      {
-        path: "/update-profile",
-        element: (
-          <ProtectedPage>
-            <ProfileUpdate />
-          </ProtectedPage>
-        ),
-      },
-      {
-        path: "/search",
-        element: <Search />,
-      },
-    ],
-  },
-]);
+    basename: "/react-instagram",
+  }
+);
 
 function App() {
   return (
