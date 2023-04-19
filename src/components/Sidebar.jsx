@@ -9,7 +9,7 @@ const Sidebar = () => {
   } = useAuthContext();
 
   if (!user) {
-    return <Loading />;
+    return;
   }
 
   return (
