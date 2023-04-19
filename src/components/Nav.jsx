@@ -24,11 +24,11 @@ const Nav = () => {
           <li>
             <NavLink to="/">Home</NavLink>
           </li>
-          <li>
-            <NavLink to="/search">Search User</NavLink>
-          </li>
           {user ? (
             <>
+              <li>
+                <NavLink to="/search">Search User</NavLink>
+              </li>
               <li>
                 <NavLink to={`/profile/${user.username}`}>Profile</NavLink>
               </li>
