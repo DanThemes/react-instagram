@@ -416,8 +416,18 @@ button {
           padding-left: 2rem;
 
           .post-comment-replies {
+            padding-left: 1rem;
+
             .post-comment-replies {
-              padding-left: 0;
+              padding-left: 1rem;
+
+              .post-comment-replies {
+                padding-left: 0.5rem;
+
+                // .post-comment-replies {
+                //   padding-left: 0;
+                // }
+              }
             }
           }
 

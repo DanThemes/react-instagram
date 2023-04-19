@@ -38,17 +38,9 @@ export const useUser = (idOrUsername) => {
           collection(db, "users"),
           where(field, "==", idOrUsername)
         );
-        // !!!!!!!!!!!!!!!!
-        // set up a onSnapshot listener here instead
         onSnapshot(docRef, (docSnapshot) => {
           setUser(docSnapshot.docs[0].data());
         });
-        // const docSnapshot = await getDocs(docRef);
-        // if (docSnapshot.docs.length === 1) {
-        //   setUser(docSnapshot.docs[0].data());
-        // } else {
-        //   setError("User not found");
-        // }
       } catch (error) {
         setError(error.message);
       } finally {

@@ -4,8 +4,8 @@ import ListPost from "./ListPost";
 import GridPost from "./GridPost";
 import Loading from "./Loading";
 
-const Posts = ({ style = "list", showOnlyPostsOfUsersFollowed }) => {
-  const { posts, isLoading } = usePosts(showOnlyPostsOfUsersFollowed);
+const Posts = ({ style = "list", uid, showOnlyPostsOfUsersFollowed }) => {
+  const { posts, isLoading } = usePosts(uid, showOnlyPostsOfUsersFollowed);
 
   if (isLoading) {
     return <Loading />;

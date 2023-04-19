@@ -12,7 +12,7 @@ const newCommentSchema = yup.object().shape({
   comment: yup.string().required("Required"),
 });
 
-const NewComment = ({ uid, pid }) => {
+const NewComment = ({ uid, pid, setShowNewReply }) => {
   const {
     register,
     handleSubmit,
@@ -41,6 +41,7 @@ const NewComment = ({ uid, pid }) => {
 
     await useNewComment(data);
     reset();
+    setShowNewReply(false);
   };
 
   const handleTextareaPress = (e) => {

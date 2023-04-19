@@ -14,7 +14,7 @@ const Home = () => {
   return (
     <div>
       <NewPost />
-      <Posts style="list" showOnlyPostsOfUsersFollowed={true} />
+      <Posts style="list" uid={false} showOnlyPostsOfUsersFollowed={true} />
     </div>
   );
 };

@@ -5,13 +5,11 @@ import { useUser } from "../hooks/users";
 import { useAuthContext } from "../context/AuthProvider";
 import Loading from "../components/Loading";
 import Avatar from "../components/Avatar";
-import { useEffect } from "react";
-import FollowUnfollowButton from "../components/FollowUnfollowButton";
 
 const Profile = () => {
   const { username } = useParams();
 
-  const { user, isLoading, error } = useUser(username);
+  const { user } = useUser(username);
   const { auth } = useAuthContext();
 
   if (!user || !auth) {

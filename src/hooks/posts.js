@@ -21,7 +21,7 @@ import {
 } from "firebase/storage";
 import { useAuthContext } from "../context/AuthProvider";
 
-export const usePosts = (showOnlyPostsOfUsersFollowed) => {
+export const usePosts = (uid, showOnlyPostsOfUsersFollowed) => {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { auth } = useAuthContext();
@@ -38,19 +38,15 @@ export const usePosts = (showOnlyPostsOfUsersFollowed) => {
 
   useEffect(() => {
     let q;
-    if (auth.user.uid) {
-      if (showOnlyPostsOfUsersFollowed) {
-        q = query(collection(db, "posts"), where("uid", "in", usersFollowed));
-      } else {
-        q = query(
-          collection(db, "posts"),
-          where("uid", "==", auth.user.uid),
-          orderBy("createdAt", "desc")
-        );
-      }
+
+    if (uid) {
+      q = query(collection(db, "posts"), where("uid", "==", uid));
+    } else if (showOnlyPostsOfUsersFollowed) {
+      q = query(collection(db, "posts"), where("uid", "in", usersFollowed));
     } else {
       q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
     }
+
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const postsArray = querySnapshot.docs.map((doc) => ({
         id: doc.id,

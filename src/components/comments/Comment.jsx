@@ -97,7 +97,13 @@ const Comment = ({ comment }) => {
       </div>
 
       <div className="post-comment-new-reply">
-        {showNewReply && <NewComment uid={auth.user.uid} pid={comment.id} />}
+        {showNewReply && (
+          <NewComment
+            uid={auth.user.uid}
+            pid={comment.id}
+            setShowNewReply={setShowNewReply}
+          />
+        )}
       </div>
 
       <div className="post-comment-replies">
