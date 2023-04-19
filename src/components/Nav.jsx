@@ -25,7 +25,7 @@ const Nav = () => {
             <NavLink to="/">Home</NavLink>
           </li>
           <li>
-            <NavLink to="/search">Search</NavLink>
+            <NavLink to="/search">Search User</NavLink>
           </li>
           {user ? (
             <>

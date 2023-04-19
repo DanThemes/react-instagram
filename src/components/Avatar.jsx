@@ -23,10 +23,6 @@ const Avatar = ({
   const [isFollowing, setIsFollowing] = useState(null);
   const [isLoadingFollowing, setIsLoadingFollowing] = useState(false);
 
-  // useEffect(() => {
-
-  // }, [user]);
-
   const handleFollowUser = async (cUser, oUser) => {
     try {
       setIsLoadingFollowing(true);

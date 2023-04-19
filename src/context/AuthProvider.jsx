@@ -197,8 +197,9 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
+      console.log(data);
       // Upload avatar
-      if (data.avatar) {
+      if (data.avatar && data.avatar.length) {
         const avatarFileExtension = data.avatar[0].name.substring(
           data.avatar[0].name.lastIndexOf(".")
         );
@@ -213,6 +214,8 @@ export const AuthProvider = ({ children }) => {
         // Get download URL for photo
         const avatarUrl = await getDownloadURL(storageRef);
         data.avatar = avatarUrl;
+      } else {
+        delete data.avatar;
       }
 
       // Remove empty fields

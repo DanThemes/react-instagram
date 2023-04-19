@@ -27,7 +27,7 @@ const Search = () => {
 
   return (
     <div className="search">
-      <h1>Search</h1>
+      <h1>Search User</h1>
       <form onSubmit={handleSubmit(handleSearch)}>
         <input
           type="search"

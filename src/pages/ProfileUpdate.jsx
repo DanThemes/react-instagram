@@ -54,9 +54,6 @@ const ProfileUpdate = () => {
   return (
     <div>
       <h1>Update Profile</h1>
-      Bio: {user.bio}
-      <hr />
-      {console.log(user)}
       <form onSubmit={handleSubmit(handleUpdateProfile)} className="auth-form">
         <label htmlFor="avatar">Avatar:</label>
         <input type="file" {...register("avatar")} />

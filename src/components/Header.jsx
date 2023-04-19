@@ -9,7 +9,7 @@ const Header = () => {
         <div className="container">
           <div className="logo-wrapper">
             <Link to="/">
-              <h1>logo</h1>
+              <h1>Insta</h1>
             </Link>
           </div>
           <div className="nav-wrapper">

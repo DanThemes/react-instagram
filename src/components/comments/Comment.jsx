@@ -45,7 +45,7 @@ const Comment = ({ comment }) => {
         <div className="post-comment-content">
           <span className="post-comment-author">
             <Link to={`/profile/${user?.username}`} className="avatar-username">
-              <strong>{user?.username}</strong> {comment.id}
+              <strong>{user?.username}</strong>
             </Link>
             :
           </span>
