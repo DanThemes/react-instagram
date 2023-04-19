@@ -19,21 +19,11 @@ import { useEffect, useState } from "react";
 
 export const useNewComment = async (data) => {
   let ref;
-  console.log(data);
-  return;
-
-  // if it's a reply to a comment
-  if ("cid" in data) {
-    // const docRef = doc(db, "comments", data.pid);
-    const docRef = doc(db, `comments/${data.pid}`);
-    ref = collection(docRef, "replies");
-  }
-  // if it's a comment
-  else {
-    ref = collection(db, "comments");
-  }
+  // console.log(data);
+  // return;
 
   try {
+    ref = collection(db, "comments");
     await addDoc(ref, {
       ...data,
       likes: [],
@@ -46,28 +36,18 @@ export const useNewComment = async (data) => {
   }
 };
 
-export const useComments = (pid = null, cid = null) => {
+export const useComments = (pid) => {
   const [isLoading, setIsLoading] = useState(true);
   const [comments, setComments] = useState(null);
 
   useEffect(() => {
     setIsLoading(true);
-    let q;
 
-    // doesn't work well
-    // allow only 1 nested level of comments
-    // or allow the default 3 levels Firebase offers?
-    // possible solution https://firebase.google.com/docs/firestore/query-data/queries#collection-group-query
-    if (pid) {
-      q = query(
-        collection(db, "comments"),
-        where("pid", "==", pid),
-        orderBy("createdAt", "asc")
-      );
-    } else if (cid) {
-      const commentRef = doc(db, "comments", cid);
-      q = query(collection(commentRef, "replies"), orderBy("createdAt", "asc"));
-    }
+    const q = query(
+      collection(db, "comments"),
+      where("pid", "==", pid),
+      orderBy("createdAt", "asc")
+    );
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const commentsArray = querySnapshot.docs.map((doc) => ({
@@ -104,31 +84,11 @@ export const useDeleteComment = async (uid, id) => {
   }
 };
 
-export const useToggleLikeComment = async (uid, comment) => {
+export const useToggleLikeComment = async (uid, id) => {
   try {
-    let q;
-
-    // if it's a reply to a comment
-    if ("cid" in comment) {
-      q = query(
-        collection(db, `comments/${comment.cid}/replies`),
-        where(documentId(), "==", comment.id)
-      );
-    }
-    // if it's a comment
-    else {
-      q = query(
-        collection(db, "comments"),
-        where(documentId(), "==", comment.id)
-      );
-    }
-    const comments = await getDocs(q);
-    const commentsData = comments.docs.map((c) => ({ ...c.data(), id: c.id }));
-    console.log(commentsData, comment);
-    const c = comments.docs[0];
-
-    const commentRef = c.ref;
-    let likes = c.data().likes;
+    const commentRef = doc(db, "comments", id);
+    const comment = await getDoc(commentRef);
+    let likes = comment.data().likes;
 
     if (likes.includes(uid)) {
       // If the comment is liked, remove the like

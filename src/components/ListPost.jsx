@@ -75,7 +75,7 @@ const Post = ({ post }) => {
     }
   };
 
-  if (!user) {
+  if (!user || !auth) {
     return <Loading />;
   }
 
@@ -149,7 +149,7 @@ const Post = ({ post }) => {
           </p>
         </div>
 
-        {auth.user && <NewComment uid={auth?.user?.uid} pid={post.id} />}
+        {auth.user && <NewComment uid={auth.user.uid} pid={post.id} />}
 
         <Comments pid={post.id} />
       </div>

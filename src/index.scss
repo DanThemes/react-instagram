@@ -323,6 +323,10 @@ button {
       grid-gap: 0.5rem;
       font-size: 0.75rem;
 
+      &.posts-comments-none {
+        display: none;
+      }
+
       .post-comment {
         display: grid;
         grid-template-columns: 1fr;
@@ -331,7 +335,7 @@ button {
         & ~ .post-comment {
           border-top: 1px solid #eee;
           margin-top: 0.5rem;
-          padding-top: 0.5rem;
+          padding-top: 1rem;
         }
 
         .post-comment-header {
@@ -399,14 +403,28 @@ button {
         }
 
         .post-comment-new-reply {
-          padding-left: 3rem;
+          .post-new-comment {
+            padding-top: 1rem;
+          }
         }
 
         .post-comment-replies {
-          padding-left: 3rem;
+          padding-left: 2rem;
 
-          .post-comment {
+          .post-comment-replies {
+            .post-comment-replies {
+              padding-left: 0;
+            }
+          }
+
+          .post-comments {
+            grid-gap: 0;
+            border-top: 1px solid #eee;
             margin-top: 1rem;
+
+            .post-comment {
+              margin-top: 1rem;
+            }
           }
         }
       }

@@ -1,20 +1,21 @@
 import React from "react";
 import Comment from "./Comment";
 import { useComments } from "../../hooks/comments";
+import Loading from "../Loading";
 
 const Comments = ({ pid }) => {
-  const { comments, isLoading } = useComments(pid);
+  const { comments } = useComments(pid);
 
-  if (isLoading) {
-    return "Loading";
-  }
-
-  if (!isLoading && !comments.length) {
-    return <div className="post-comments">No comments.</div>;
+  if (!comments) {
+    return [];
   }
 
   return (
-    <div className="post-comments">
+    <div
+      className={`post-comments ${
+        !comments.length ? "posts-comments-none" : ""
+      }`}
+    >
       {comments.map((comment) => (
         <Comment key={comment.id} comment={comment} />
       ))}

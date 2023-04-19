@@ -13,6 +13,7 @@ import Popup from "reactjs-popup";
 import UsersList from "../UsersList";
 import { Link } from "react-router-dom";
 import NewComment from "./NewComment";
+import Comments from "./Comments";
 
 const Comment = ({ comment }) => {
   const [showNewReply, setShowNewReply] = useState(false);
@@ -23,14 +24,7 @@ const Comment = ({ comment }) => {
   } = useAuthContext();
   const isAuthor = comment.uid === auth?.user?.uid;
 
-  const { comments, isLoading: areCommentsLoading } = useComments(
-    null,
-    comment.id
-  );
-
-  const isReply = !!comment.cid;
-
-  if (isLoading || isAuthLoading || areCommentsLoading) {
+  if (isLoading || isAuthLoading) {
     return;
   }
 
@@ -42,7 +36,7 @@ const Comment = ({ comment }) => {
   };
 
   const handleToggleLikeComment = async () => {
-    await useToggleLikeComment(auth.user.uid, comment);
+    await useToggleLikeComment(auth.user.uid, comment.id);
   };
 
   return (
@@ -102,16 +96,12 @@ const Comment = ({ comment }) => {
         )}
       </div>
 
-      <div className="post-comment-replies">
-        {comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} />
-        ))}
+      <div className="post-comment-new-reply">
+        {showNewReply && <NewComment uid={auth.user.uid} pid={comment.id} />}
       </div>
 
-      <div className="post-comment-new-reply">
-        {showNewReply && (
-          <NewComment uid={auth.user.uid} parentComment={comment} />
-        )}
+      <div className="post-comment-replies">
+        <Comments pid={comment.id} />
       </div>
     </div>
   );
