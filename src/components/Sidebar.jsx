@@ -5,18 +5,24 @@ import Loading from "./Loading";
 
 const Sidebar = () => {
   const {
-    auth: { user },
+    auth: { user, isLoading },
   } = useAuthContext();
 
-  if (!user) {
-    return;
+  if (isLoading) {
+    return <Loading />;
   }
 
   return (
     <aside className="sidebar">
-      <h4>{user.displayName}</h4>
-      <p>{user.bio}</p>
-      <Avatar uid={user.uid} />
+      {user ? (
+        <>
+          <h4>{user.displayName}</h4>
+          <p>{user.bio}</p>
+          <Avatar uid={user.uid} />
+        </>
+      ) : (
+        ""
+      )}
     </aside>
   );
 };
