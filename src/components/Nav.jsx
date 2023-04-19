@@ -21,11 +21,11 @@ const Nav = () => {
     !isLoading && (
       <div>
         <ul>
-          <li>
-            <NavLink to="/">Home</NavLink>
-          </li>
           {user ? (
             <>
+              <li>
+                <NavLink to="/">Home</NavLink>
+              </li>
               <li>
                 <NavLink to="/search">Search User</NavLink>
               </li>
