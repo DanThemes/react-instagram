@@ -24,5 +24,4 @@ jobs:
           server: ${{ secrets.ftp_host }}
           username: ${{ secrets.ftp_username }}
           password: ${{ secrets.ftp_password }}
-          local-dir: ./build/
           server-dir: danthemes.com/public_html/react/insta/
